@@ -1,26 +1,10 @@
-import { Footer } from "@/components/core/footer";
-import { Hero } from "@/components/core/hero";
-import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
-import { cn } from "@/lib/utils";
-
 export default function Home() {
   return (
-    <main className="flex flex-1 flex-col items-center justify-center gap-4 p-2 sm:gap-6 md:p-4">
-      <AnimatedGridPattern
-        className={cn(
-          "mask-[radial-gradient(500px_circle_at_center,white,transparent)] sm:mask-[radial-gradient(650px_circle_at_center,white,transparent)]",
-          "-z-10 absolute inset-0"
-        )}
-        duration={3}
-        maxOpacity={0.1}
-        repeatDelay={1}
-      />
-
-      <div className="flex w-full flex-1 flex-col items-center justify-center">
-        <Hero />
-      </div>
-
-      <Footer />
+    <main className="flex min-h-svh flex-col items-center justify-center gap-4 p-4">
+      <h1 className="font-bold text-4xl">Vercord</h1>
+      <p className="text-center text-muted-foreground">
+        Seamlessly integrate your Vercel deployment notifications with Discord.
+      </p>
     </main>
   );
 }
