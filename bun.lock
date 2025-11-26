@@ -20,7 +20,7 @@
     },
     "apps/fumadocs": {
       "name": "fumadocs",
-      "version": "0.0.0",
+      "version": "0.0.1",
       "dependencies": {
         "class-variance-authority": "^0.7.1",
         "feed": "^5.1.0",
@@ -46,7 +46,7 @@
     },
     "apps/web": {
       "name": "web",
-      "version": "0.0.2",
+      "version": "0.0.1",
       "dependencies": {
         "@radix-ui/react-slot": "^1.2.4",
         "@tanstack/react-form": "^1.26.0",
@@ -79,7 +79,7 @@
     },
     "packages/config": {
       "name": "@vercord-recode/config",
-      "version": "0.0.2",
+      "version": "0.0.1",
     },
   },
   "packages": {
