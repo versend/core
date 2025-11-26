@@ -7,13 +7,13 @@
     "packages/*"
   ],
   "scripts": {
-    "format": "biome format --write .",
-    "lint": "biome lint --write .",
-    "check": "biome check --write .",
     "prepare": "husky",
     "dev": "turbo dev",
     "build": "turbo build",
     "check-types": "turbo check-types",
+    "check": "turbo check",
+    "format": "turbo format",
+    "lint": "turbo lint",
     "dev:native": "turbo -F native dev",
     "dev:web": "turbo -F web dev",
     "bumpp": "bumpp -r"
