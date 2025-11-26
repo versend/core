@@ -53,6 +53,7 @@ export async function POST(req: Request) {
       );
     }
 
+    console.error("Webhook error:", error);
     return Response.json(
       { success: false, error: "Internal server error" },
       { status: HttpStatusCode.INTERNAL_SERVER_ERROR_500 }
