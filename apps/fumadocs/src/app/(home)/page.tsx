@@ -1,20 +1,11 @@
 import { ArrowRight, Github } from "lucide-react";
 import Link from "next/link";
+import { StripedPattern } from "@/components/ui/striped-pattern";
 
 export default function HomePage() {
   return (
     <main className="relative flex flex-1 flex-col items-center justify-center overflow-hidden px-4 py-20">
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 1px 1px, var(--muted-foreground) 1px, transparent 0)",
-          backgroundSize: "24px 24px",
-          opacity: 0.15,
-          maskImage:
-            "radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 100%)",
-        }}
-      />
+      <StripedPattern className="text-muted-foreground/20 [mask-image:radial-gradient(350px_circle_at_center,white,transparent)]" />
 
       <div className="relative flex max-w-3xl flex-col items-center gap-6 text-center">
         <h1 className="font-bold font-mono text-7xl tracking-tighter sm:text-8xl">
