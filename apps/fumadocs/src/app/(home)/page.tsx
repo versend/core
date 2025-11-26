@@ -19,7 +19,7 @@ export default function HomePage() {
       <div className="relative flex max-w-3xl flex-col items-center gap-6 text-center">
         {/* Logo/Title */}
         <h1 className="font-bold font-mono text-7xl tracking-tighter sm:text-8xl">
-          <span className="bg-gradient-to-b from-fd-foreground to-fd-muted-foreground bg-clip-text text-transparent">
+          <span className="bg-linear-to-b from-fd-foreground to-fd-muted-foreground bg-clip-text text-transparent">
             vercord
           </span>
         </h1>
