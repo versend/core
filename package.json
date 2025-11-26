@@ -11,7 +11,6 @@
     "dev": "turbo dev",
     "build": "turbo build",
     "check-types": "turbo check-types",
-    "check": "turbo check",
     "format": "turbo format",
     "lint": "turbo lint",
     "dev:native": "turbo -F native dev",

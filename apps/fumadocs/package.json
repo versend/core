@@ -9,8 +9,7 @@
     "types:check": "fumadocs-mdx && tsc --noEmit",
     "postinstall": "fumadocs-mdx",
     "format": "biome format --write .",
-    "lint": "biome lint --write .",
-    "check": "biome check --write ."
+    "lint": "biome lint --write ."
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
