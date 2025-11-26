@@ -1,3 +1,5 @@
+import { Footer } from "@/components/core/footer";
+
 export default function Home() {
   return (
     <main className="flex min-h-svh flex-col items-center justify-center gap-4 p-4">
@@ -5,6 +7,7 @@ export default function Home() {
       <p className="text-center text-muted-foreground">
         Seamlessly integrate your Vercel deployment notifications with Discord.
       </p>
+      <Footer />
     </main>
   );
 }
