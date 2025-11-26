@@ -11,12 +11,6 @@ import { webhookSchema } from "@/schemas/vercel";
 
 export async function POST(req: Request) {
   try {
-    const ip = getClientIp(req.headers);
-    const rateLimitResult = await checkRateLimit(ip);
-    if (rateLimitResult) {
-      return rateLimitResult;
-    }
-
     const rawBody = await req.text();
     const signature = req.headers.get("x-vercel-signature");
 
@@ -29,6 +23,12 @@ export async function POST(req: Request) {
         },
         { status: HttpStatusCode.UNAUTHORIZED_401 }
       );
+    }
+
+    const ip = getClientIp(req.headers);
+    const rateLimitResult = await checkRateLimit(ip);
+    if (rateLimitResult) {
+      return rateLimitResult;
     }
 
     const payload = JSON.parse(rawBody) as unknown;
