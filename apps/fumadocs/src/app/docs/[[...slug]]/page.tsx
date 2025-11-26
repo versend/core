@@ -1,5 +1,3 @@
-import { getPageImage, source } from "@/lib/source";
-import { getMDXComponents } from "@/mdx-components";
 import { createRelativeLink } from "fumadocs-ui/mdx";
 import {
   DocsBody,
@@ -9,6 +7,9 @@ import {
 } from "fumadocs-ui/page";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { LLMCopyButton, ViewOptions } from "@/components/page-actions";
+import { getPageImage, source } from "@/lib/source";
+import { getMDXComponents } from "@/mdx-components";
 
 type PageProps = {
   params: Promise<{ slug?: string[] }>;
@@ -34,6 +35,14 @@ export default async function Page(props: PageProps) {
             a: createRelativeLink(source, page),
           })}
         />
+
+        <div className="flex flex-row items-center gap-2 border-b pt-2 pb-6">
+          <LLMCopyButton markdownUrl={`${page.url}.mdx`} />
+          <ViewOptions
+            githubUrl={`https://github.com/vercord/core/blob/dev/apps/docs/content/docs/${page.path}`}
+            markdownUrl={`${page.url}.mdx`}
+          />
+        </div>
       </DocsBody>
     </DocsPage>
   );
