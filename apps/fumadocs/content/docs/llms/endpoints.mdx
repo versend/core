@@ -1,0 +1,30 @@
+---
+title: Text Endpoints
+description: Get documentation as plain text for AI tools
+icon: FileText
+---
+
+# Text Endpoints
+
+Two endpoints for programmatic access to documentation content.
+
+## `/llms-full.txt`
+
+Returns **all documentation pages** combined into one text file.
+
+```
+https://docs.vercord.lol/llms-full.txt
+```
+
+Use this when you want to give an AI the complete documentation context.
+
+## `.mdx` suffix
+
+Add `.mdx` to any page URL to get just that page as plain text.
+
+```
+/docs/installation/requirements → /docs/installation/requirements.mdx
+```
+
+Use this when you only need context about a specific topic.
+

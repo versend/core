@@ -1,0 +1,34 @@
+---
+title: Deploy to Vercel
+description: Deploy the Vercord relay service to Vercel
+icon: Rocket
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+# Deploy to Vercel
+
+<Steps>
+<Step>
+
+### Deploy the Repository
+
+[Click here to deploy Vercord to your Vercel account](https://vercel.com/new/clone?repository-url=https://github.com/vercord/core/tree/master/apps/web)
+
+</Step>
+<Step>
+
+### Note Your Domain
+
+After deployment, note your project's domain (e.g., `your-project.vercel.app`).
+
+<Callout>
+  You'll need this domain later when configuring the Vercel webhook endpoint.
+</Callout>
+
+</Step>
+</Steps>
+
+The deployment will initially fail because environment variables aren't set yet.
+That's expected — continue with the next steps.
+

@@ -1,51 +1,46 @@
 ---
 title: Setup Discord
-description: How to setup Discord for Vercord
-icon: CheckCheck
+description: Create a Discord webhook to receive notifications
+icon: MessageSquare
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-# Setup Discord
+# Setup Discord Webhook
 
 <Steps>
 <Step>
 
-### Open Discord and Go to Your Server
+### Open Channel Settings
 
-Open Discord and navigate to the server where you want to receive Vercord
-messages.
-
-</Step>
-<Step>
-
-### Edit the Target Channel
-
-Right-click the channel you want to use and select **Edit Channel**.
+In your Discord server, right-click the channel where you want deployment
+notifications and select **Edit Channel**.
 
 </Step>
 <Step>
 
-### Go to Integrations > Webhooks
+### Navigate to Webhooks
 
-In the channel settings, go to the **Integrations** tab, then click
-**Webhooks**.
+Go to **Integrations** → **Webhooks**.
 
 </Step>
 <Step>
 
-### Create or Select a Webhook
+### Create a Webhook
 
-Click **New Webhook** (or select an existing one). Name it (e.g., `Vercord`).
+Click **New Webhook** and give it a name (e.g., `Vercord`).
 
 </Step>
 <Step>
 
 ### Copy the Webhook URL
 
-Copy the **Webhook URL** provided by Discord.
+Click **Copy Webhook URL**.
 
-<Callout>Save the webhook URL, you will need it for later.</Callout>
+<Callout type="warn">
+  Save this URL securely — you'll need it for the `DISCORD_WEBHOOK_URL`
+  environment variable.
+</Callout>
 
 </Step>
 </Steps>

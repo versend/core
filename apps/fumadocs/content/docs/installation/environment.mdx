@@ -1,50 +1,82 @@
 ---
-title: Environment
-description: How to setup environment variables for Vercord
+title: Environment Variables
+description: Configure environment variables and finish setup
 icon: Settings
 ---
 
+import { Step, Steps } from 'fumadocs-ui/components/steps';
 import { TypeTable } from 'fumadocs-ui/components/type-table';
 
 # Environment Variables
 
-These are the environment variables you need to set at your Vercord instance in
-Vercel for it to work
+<Steps>
+<Step>
+
+### Open Your Vercord Project Settings
+
+Go to your Vercord deployment in Vercel → **Settings** → **Environment Variables**.
+
+</Step>
+<Step>
+
+### Add the Required Variables
 
 <TypeTable
   type={{
-    WEBHOOK_INTEGRATION_SECRET: {
-      description: 'The secret for the Vercel webhook integration',
-      type: 'string',
-      default: 'your-secret',
-      required: true
-    },
     DISCORD_WEBHOOK_URL: {
-      description: 'The URL for the Discord webhook integration',
+      description: 'The Discord webhook URL you copied earlier',
       type: 'string',
-      default: 'https://discord.com/api/webhooks/<id>/<token>',
-      required: true
+      required: true,
     },
-    DISCORD_WEBHOOK_USERNAME: {
-      description: 'The username for the Discord webhook',
+    UPSTASH_REDIS_REST_URL: {
+      description: 'Upstash Redis REST URL',
       type: 'string',
-      default: 'Vercord',
-      required: false
+      required: true,
     },
-    DISCORD_WEBHOOK_AVATAR_URL: {
-      description: 'The avatar URL for the Discord webhook',
+    UPSTASH_REDIS_REST_TOKEN: {
+      description: 'Upstash Redis REST token',
       type: 'string',
-      default: 'https://vercord.dev/logo.jpg',
-      required: false
-    }
+      required: true,
+    },
+    WEBHOOK_INTEGRATION_SECRET: {
+      description: 'The signing secret from Vercel webhook',
+      type: 'string',
+      required: true,
+    },
   }}
 />
 
-## Security Considerations
+</Step>
+<Step>
 
-- Store your webhook secret securely with a unique value for each integration
-- All incoming webhooks are validated using HMAC-SHA1 signatures
-- Webhook payloads are validated against a strict schema to ensure data
-  integrity
+### Add Optional Variables (if desired)
 
-Then just redeploy your Vercord instance and you're done!
+<TypeTable
+  type={{
+    DISCORD_WEBHOOK_USERNAME: {
+      description: 'Custom username for the webhook bot',
+      type: 'string',
+      default: 'Vercord',
+    },
+    DISCORD_WEBHOOK_AVATAR_URL: {
+      description: 'Custom avatar URL for the webhook bot',
+      type: 'string',
+    },
+  }}
+/>
+
+</Step>
+<Step>
+
+### Redeploy
+
+Go to **Deployments** and click the three dots on the latest deployment →
+**Redeploy**.
+
+</Step>
+</Steps>
+
+## Done!
+
+Your Vercord instance is now ready. Trigger a deployment on any monitored
+project to test the integration.

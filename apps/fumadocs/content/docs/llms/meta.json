@@ -1,4 +1,4 @@
 {
-  "title": "llms",
-  "pages": ["llms-full.txt", "mdx", "page-actions"]
+  "title": "AI Features",
+  "pages": ["index", "page-actions", "endpoints"]
 }
