@@ -41,33 +41,15 @@ Go to your Vercord deployment in Vercel → **Settings** → **Environment Varia
 
 ### Add Optional Variables (if desired)
 
-<Callout type="error">
-  **⚠️ Security Warning**: The `ENABLE_RATE_LIMITING` variable controls rate limiting protection. **Do not disable rate limiting** (`ENABLE_RATE_LIMITING=false`) unless you fully understand the security risks:
-
-  - **No protection against abuse**: Malicious actors can spam your webhook endpoint
-  - **DDoS vulnerability**: Your endpoint can be overwhelmed by excessive requests
-  - **Resource exhaustion**: Uncontrolled requests can consume server resources and increase costs
-  - **Discord webhook spam**: Excessive requests could trigger Discord's rate limits or get your webhook disabled
-
-  Rate limiting is **strongly recommended** for all production deployments. Only disable it if you have alternative protection (e.g., Vercel's rate limiting, Cloudflare, or other DDoS mitigation) and understand the implications.
-</Callout>
-
 <TypeTable
   type={{
-    ENABLE_RATE_LIMITING: {
-      description: 'Disable rate limiting by setting to "false" (NOT RECOMMENDED - see security warning above). If omitted, rate limiting is automatically enabled when Upstash credentials are present.',
-      type: 'boolean',
-      default: 'Auto-enabled when Upstash config is present',
-    },
     UPSTASH_REDIS_REST_URL: {
-      description: 'Upstash Redis REST URL (required if rate limiting is enabled)',
+      description: 'Upstash Redis REST URL for rate limiting',
       type: 'string',
-      required: false,
     },
     UPSTASH_REDIS_REST_TOKEN: {
-      description: 'Upstash Redis REST token (required if rate limiting is enabled)',
+      description: 'Upstash Redis REST token for rate limiting',
       type: 'string',
-      required: false,
     },
     DISCORD_WEBHOOK_USERNAME: {
       description: 'Custom username for the webhook bot',
@@ -80,6 +62,10 @@ Go to your Vercord deployment in Vercel → **Settings** → **Environment Varia
     },
   }}
 />
+
+<Callout>
+  Rate limiting is enabled automatically when both Upstash variables are set.
+</Callout>
 
 </Step>
 <Step>
