@@ -4,42 +4,12 @@ import { Redis } from "@upstash/redis";
 import HttpStatusCode from "@/enums/http-status-codes";
 import { env } from "@/env";
 
-const isRateLimitingEnabled = (): boolean => {
-  const hasUpstashConfig = Boolean(
-    env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN
-  );
-
-  if (env.ENABLE_RATE_LIMITING === false) {
-    return false;
-  }
-
-  if (env.ENABLE_RATE_LIMITING === true) {
-    if (!hasUpstashConfig) {
-      throw new Error(
-        "Rate limiting is enabled but UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN are required"
-      );
-    }
-    return true;
-  }
-
-  // undefined - auto-detect based on config presence
-  return hasUpstashConfig;
-};
+const hasUpstashConfig =
+  env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN;
 
 let ratelimit: Ratelimit | null = null;
-let rateLimitingEnabled: boolean | null = null;
 
-const getRatelimit = (): Ratelimit | null => {
-  if (rateLimitingEnabled === null) {
-    rateLimitingEnabled = isRateLimitingEnabled();
-  }
-  if (!rateLimitingEnabled) {
-    return null;
-  }
-  if (ratelimit) {
-    return ratelimit;
-  }
-
+if (env.ENABLE_RATE_LIMITING !== false && hasUpstashConfig) {
   const redis = new Redis({
     url: env.UPSTASH_REDIS_REST_URL!,
     token: env.UPSTASH_REDIS_REST_TOKEN!,
@@ -49,9 +19,7 @@ const getRatelimit = (): Ratelimit | null => {
     redis,
     limiter: Ratelimit.slidingWindow(10, "60 s"),
   });
-
-  return ratelimit;
-};
+}
 
 /**
  * Extracts the client IP from request headers
@@ -73,12 +41,11 @@ export function getClientIp(headers: Headers): string {
 export async function checkRateLimit(
   ip: string
 ): Promise<Response | undefined> {
-  const rateLimiter = getRatelimit();
-  if (!rateLimiter) {
+  if (!ratelimit) {
     return;
   }
 
-  const { success, reset } = await rateLimiter.limit(ip);
+  const { success, reset } = await ratelimit.limit(ip);
 
   if (!success) {
     return new Response(
@@ -92,7 +59,10 @@ export async function checkRateLimit(
         headers: {
           "Content-Type": "application/json",
           "X-RateLimit-Reset": reset.toString(),
-          "Retry-After": Math.ceil((reset - Date.now()) / 1000).toString(),
+          "Retry-After": Math.max(
+            0,
+            Math.ceil((reset - Date.now()) / 1000)
+          ).toString(),
         },
       }
     );
