@@ -4,30 +4,12 @@ import { Redis } from "@upstash/redis";
 import HttpStatusCode from "@/enums/http-status-codes";
 import { env } from "@/env";
 
-const shouldEnableRateLimiting = (): boolean => {
-  // Explicitly disabled
-  if (env.ENABLE_RATE_LIMITING === false) {
-    return false;
-  }
-
-  // Check if Upstash config is available
-  const hasUpstashConfig =
-    env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN;
-
-  // Explicitly enabled but missing config
-  if (env.ENABLE_RATE_LIMITING === true && !hasUpstashConfig) {
-    throw new Error(
-      "Rate limiting is enabled but UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN are required"
-    );
-  }
-
-  // Auto-enable if config is present (when undefined) or explicitly enabled
-  return hasUpstashConfig;
-};
+const hasUpstashConfig =
+  env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN;
 
 let ratelimit: Ratelimit | null = null;
 
-if (shouldEnableRateLimiting()) {
+if (env.ENABLE_RATE_LIMITING !== false && hasUpstashConfig) {
   const redis = new Redis({
     url: env.UPSTASH_REDIS_REST_URL!,
     token: env.UPSTASH_REDIS_REST_TOKEN!,
