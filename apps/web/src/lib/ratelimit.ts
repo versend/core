@@ -59,7 +59,10 @@ export async function checkRateLimit(
         headers: {
           "Content-Type": "application/json",
           "X-RateLimit-Reset": reset.toString(),
-          "Retry-After": Math.ceil((reset - Date.now()) / 1000).toString(),
+          "Retry-After": Math.max(
+            0,
+            Math.ceil((reset - Date.now()) / 1000)
+          ).toString(),
         },
       }
     );
