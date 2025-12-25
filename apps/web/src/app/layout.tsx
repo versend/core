@@ -14,9 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "vercord",
-  description:
-    "Seamlessly integrate your Vercel deployment notifications with Discord.",
+  title: "versend",
+  description: "Vercel deployment notifications wherever you want.",
 };
 
 export default function RootLayout({

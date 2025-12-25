@@ -4,9 +4,9 @@ import { BookIcon } from "lucide-react";
 export function baseOptions(): BaseLayoutProps {
   return {
     nav: {
-      title: "Vercord",
+      title: "Versend",
     },
-    githubUrl: "https://github.com/vercord/core",
+    githubUrl: "https://github.com/versend/core",
     links: [
       {
         icon: <BookIcon />,

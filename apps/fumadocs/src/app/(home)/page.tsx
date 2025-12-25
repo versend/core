@@ -10,12 +10,12 @@ export default function HomePage() {
       <div className="relative flex max-w-3xl flex-col items-center gap-6 text-center">
         <h1 className="font-bold font-mono text-7xl tracking-tighter sm:text-8xl">
           <span className="bg-linear-to-b from-fd-foreground to-fd-muted-foreground bg-clip-text text-transparent">
-            vercord
+            versend
           </span>
         </h1>
 
         <p className="max-w-lg text-fd-muted-foreground text-xl">
-          A webhook relay. Vercel sends deployment events, Vercord forwards them
+          A webhook relay. Vercel sends deployment events, Versend forwards them
           wherever you want. That's it.
         </p>
 
@@ -29,7 +29,7 @@ export default function HomePage() {
           </Link>
           <Link
             className="inline-flex items-center gap-2 rounded-full border border-fd-border px-6 py-3 font-medium transition-colors hover:bg-fd-muted"
-            href="https://github.com/vercord/core"
+            href="https://github.com/versend/core"
             rel="noopener noreferrer"
             target="_blank"
           >

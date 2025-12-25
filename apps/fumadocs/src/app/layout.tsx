@@ -8,8 +8,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "vercord docs",
-  description: "Documentation for vercord.",
+  title: "versend docs",
+  description: "Documentation for versend.",
 };
 
 export default function Layout({ children }: LayoutProps<"/">) {

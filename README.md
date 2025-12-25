@@ -1,7 +1,7 @@
-# vercord
+# versend
 
-Vercel deployment notifications in Discord. Self-hosted webhook relay.
+Vercel deployment notifications wherever you want. Self-hosted webhook relay.
 
 ## Docs
 
-[docs.vercord.lol](https://docs.vercord.lol)
+[docs.versend.lol](https://docs.versend.lol)

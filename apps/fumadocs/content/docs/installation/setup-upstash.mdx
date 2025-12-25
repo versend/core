@@ -8,7 +8,7 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 
 # Setup Upstash Redis
 
-Vercord uses Upstash Redis for rate limiting. Add the credentials and it's enabled. No credentials = no rate limiting.
+Versend uses Upstash Redis for rate limiting. Add the credentials and it's enabled. No credentials = no rate limiting.
 
 <Callout type="error">
   **Skipping this step?** Without rate limiting, your webhook endpoint is vulnerable to:
@@ -35,7 +35,7 @@ Go to [console.upstash.com](https://console.upstash.com/) and sign up or log in.
 
 Click **Create Database** and configure:
 
-- **Name**: Anything (e.g., `vercord`)
+- **Name**: Anything (e.g., `versend`)
 - **Region**: Choose the region closest to your Vercel deployment (usually `us-east-1` for Vercel)
 - **Type**: Regional is fine
 

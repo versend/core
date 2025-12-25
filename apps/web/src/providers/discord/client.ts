@@ -15,7 +15,7 @@ export async function sendEmbed(embed: Embed): Promise<void> {
   }
 
   const hook = new Webhook(env.DISCORD_WEBHOOK_URL);
-  hook.setUsername(env.DISCORD_WEBHOOK_USERNAME || "Vercord");
+  hook.setUsername(env.DISCORD_WEBHOOK_USERNAME || "Versend");
   hook.setAvatarUrl(env.DISCORD_WEBHOOK_AVATAR_URL || DEFAULT_AVATAR_URL);
   hook.addEmbed(embed);
 

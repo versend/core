@@ -93,9 +93,9 @@ function setBasicProperties(
   embed.setColor(`#${color.toString(16)}`);
   embed.setTimestamp();
   embed.setAuthor({
-    name: "vercord.lol",
+    name: "versend.lol",
     icon_url: env.DISCORD_WEBHOOK_AVATAR_URL || DEFAULT_AVATAR_URL,
-    url: "https://vercord.lol",
+    url: "https://versend.lol",
   });
 }
 

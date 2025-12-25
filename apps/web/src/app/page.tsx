@@ -16,7 +16,7 @@ export default function Home() {
 
         {/* Title */}
         <h1 className="font-bold font-mono text-5xl tracking-tighter">
-          vercord
+          versend
         </h1>
 
         {/* Description */}
@@ -28,7 +28,7 @@ export default function Home() {
         {/* CTA */}
         <Link
           className="inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2.5 font-medium text-background text-sm transition-colors hover:bg-foreground/90"
-          href="https://docs.vercord.lol"
+          href="https://docs.versend.lol"
           rel="noopener noreferrer"
           target="_blank"
         >
@@ -39,7 +39,7 @@ export default function Home() {
         {/* Source link */}
         <Link
           className="text-muted-foreground text-sm transition-colors hover:text-foreground"
-          href="https://github.com/vercord/core"
+          href="https://github.com/versend/core"
           rel="noopener noreferrer"
           target="_blank"
         >
