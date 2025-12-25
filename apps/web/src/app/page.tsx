@@ -21,7 +21,7 @@ export default function Home() {
 
         {/* Description */}
         <p className="max-w-xs text-muted-foreground">
-          Vercel deployment notifications in Discord. Deploy your own in
+          Vercel deployment notifications wherever you want. Deploy your own in
           minutes.
         </p>
 

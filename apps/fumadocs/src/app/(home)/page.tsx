@@ -5,7 +5,7 @@ import { StripedPattern } from "@/components/ui/striped-pattern";
 export default function HomePage() {
   return (
     <main className="relative flex flex-1 flex-col items-center justify-center overflow-hidden px-4 py-20">
-      <StripedPattern className="text-muted-foreground/20 [mask-image:radial-gradient(350px_circle_at_center,white,transparent)]" />
+      <StripedPattern className="mask-[radial-gradient(350px_circle_at_center,white,transparent)] text-muted-foreground/20" />
 
       <div className="relative flex max-w-3xl flex-col items-center gap-6 text-center">
         <h1 className="font-bold font-mono text-7xl tracking-tighter sm:text-8xl">
@@ -16,7 +16,7 @@ export default function HomePage() {
 
         <p className="max-w-lg text-fd-muted-foreground text-xl">
           A webhook relay. Vercel sends deployment events, Vercord forwards them
-          to Discord. That's it.
+          wherever you want. That's it.
         </p>
 
         <div className="flex items-center gap-3 pt-4">
@@ -40,19 +40,23 @@ export default function HomePage() {
 
         <div className="mt-16 grid w-full gap-px overflow-hidden rounded-xl border border-fd-border bg-fd-border sm:grid-cols-3">
           <Card
-            desc="Events hit Discord within seconds of Vercel firing them"
+            desc="Events hit your channels within seconds of Vercel firing them"
             title="Fast"
           />
           <Card
-            desc="Branch, commit, status, links — all in the embed"
+            desc="Branch, commit, status, links — all in the message"
             title="Detailed"
           />
-          <Card desc="Deploy, add 4 env vars, done" title="Simple" />
+          <Card
+            desc="Send to one platform or many — your choice"
+            title="Multi-provider"
+          />
         </div>
 
         <p className="mt-8 max-w-md text-fd-muted-foreground/60 text-sm">
-          This isn't a platform or a service. It's ~200 lines of code that sits
-          between Vercel and Discord. Self-host it, fork it, forget about it.
+          This isn't a platform or a service. It's a simple relay that sits
+          between Vercel and your notification channels. Self-host it, fork it,
+          forget about it.
         </p>
       </div>
     </main>
