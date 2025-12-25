@@ -12,11 +12,14 @@ export const env = createEnv({
     TELEGRAM_CHAT_ID: string().optional(),
     // Slack
     SLACK_WEBHOOK_URL: string().url().optional(),
+    // Generic Webhook
+    WEBHOOK_URL: string().url().optional(),
     // Rate limiting
     UPSTASH_REDIS_REST_URL: string().url().optional(),
     UPSTASH_REDIS_REST_TOKEN: string().optional(),
     // Filtering
     FILTER_EVENTS: string().optional(),
+    FILTER_TARGETS: string().optional(),
   },
   client: {},
   runtimeEnv: {
@@ -25,9 +28,11 @@ export const env = createEnv({
     TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
     TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID,
     SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL,
+    WEBHOOK_URL: process.env.WEBHOOK_URL,
     UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
     UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
     FILTER_EVENTS: process.env.FILTER_EVENTS,
+    FILTER_TARGETS: process.env.FILTER_TARGETS,
   },
   extends: [vercel()],
 });

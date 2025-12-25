@@ -1,0 +1,95 @@
+---
+title: Generic Webhook
+description: Forward Vercel events to any URL
+icon: Globe
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { TypeTable } from 'fumadocs-ui/components/type-table';
+
+# Generic Webhook Provider
+
+Forward the raw Vercel webhook payload to any HTTP endpoint. Perfect for integrating with Zapier, n8n, Make, or your own services.
+
+## Features
+
+- Forwards the complete Vercel webhook payload as JSON
+- Adds `X-Versend-Event` header with the event type
+- Automatic retry with backoff for failures
+- Works with any HTTP endpoint that accepts POST requests
+
+## Setup
+
+<Steps>
+<Step>
+
+### Get Your Webhook URL
+
+Set up an endpoint to receive webhooks. This could be:
+
+- **Zapier**: Create a Zap with "Webhooks by Zapier" trigger
+- **n8n**: Create a workflow with "Webhook" trigger node
+- **Make**: Create a scenario with "Webhooks" module
+- **Custom**: Any URL that accepts POST requests with JSON body
+
+</Step>
+<Step>
+
+### Add Environment Variable
+
+Add this to your Vercel project:
+
+<TypeTable
+  type={{
+    WEBHOOK_URL: {
+      description: 'URL to forward webhooks to',
+      type: 'string',
+      required: true,
+    },
+  }}
+/>
+
+</Step>
+<Step>
+
+### Redeploy
+
+Redeploy your Versend instance to apply the changes.
+
+</Step>
+</Steps>
+
+## Payload Format
+
+The endpoint receives the raw Vercel webhook payload:
+
+```json
+{
+  "id": "webhook_xxx",
+  "type": "deployment.succeeded",
+  "createdAt": 1234567890,
+  "payload": {
+    "deployment": { ... },
+    "links": { ... },
+    ...
+  }
+}
+```
+
+## Headers
+
+Each request includes:
+
+| Header | Description |
+|--------|-------------|
+| `Content-Type` | `application/json` |
+| `User-Agent` | `Versend/1.0` |
+| `X-Versend-Event` | Event type (e.g., `deployment.succeeded`) |
+
+## Use Cases
+
+- **Zapier/Make automation**: Trigger workflows on deployments
+- **Custom dashboards**: Aggregate deployment data
+- **Audit logging**: Store all deployment events
+- **Multi-service fanout**: Forward to multiple internal services
+

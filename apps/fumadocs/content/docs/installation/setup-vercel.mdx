@@ -44,3 +44,16 @@ After creating the webhook, Vercel will show you a **signing secret**.
 
 </Step>
 </Steps>
+
+## Filtering by Project
+
+You can filter which projects trigger notifications by choosing where to create the webhook:
+
+- **Account/Team level**: Receives events from **all** projects in the account/team
+- **Project level**: Receives events from **only that project**
+
+<Callout type="warn">
+  Each Versend instance can only have **one** webhook secret. If you need to monitor multiple specific projects (but not all), create the webhook at the account/team level and all projects will be monitored.
+</Callout>
+
+For single-project monitoring, create the webhook directly in that project's settings.

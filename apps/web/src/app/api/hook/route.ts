@@ -2,7 +2,7 @@ import { after } from "next/server";
 import { ZodError } from "zod/v4";
 
 import HttpStatusCode from "@/enums/http-status-codes";
-import { isEventAllowed } from "@/lib/filter";
+import { isEventAllowed, isTargetAllowed } from "@/lib/filter";
 import { sendNotifications } from "@/lib/notify";
 import { checkRateLimit, getClientIp } from "@/lib/ratelimit";
 import { verifySignature } from "@/lib/verify";
@@ -36,6 +36,10 @@ export async function POST(req: Request) {
 
     if (!isEventAllowed(webhook.type)) {
       return Response.json({ success: true, message: "Event filtered" });
+    }
+
+    if (!isTargetAllowed(webhook)) {
+      return Response.json({ success: true, message: "Target filtered" });
     }
 
     after(() => sendNotifications(webhook));

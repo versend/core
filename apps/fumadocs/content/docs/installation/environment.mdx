@@ -75,6 +75,17 @@ Add the variables for at least one provider. See the [Providers](/docs/providers
   }}
 />
 
+**Generic Webhook:**
+
+<TypeTable
+  type={{
+    WEBHOOK_URL: {
+      description: 'URL to forward raw webhook payloads to',
+      type: 'string',
+    },
+  }}
+/>
+
 </Step>
 <Step>
 
@@ -115,6 +126,25 @@ Add the variables for at least one provider. See the [Providers](/docs/providers
 Example: `FILTER_EVENTS=deployment.error,deployment.succeeded,deployment.ready`
 
 If set, only the specified events will trigger notifications. If not set, all events pass through.
+
+</Step>
+<Step>
+
+### Add Target Filtering (Optional)
+
+<TypeTable
+  type={{
+    FILTER_TARGETS: {
+      description: 'Comma-separated list of deployment targets to allow',
+      type: 'string',
+      default: 'all targets',
+    },
+  }}
+/>
+
+Example: `FILTER_TARGETS=production`
+
+If set, only deployments to the specified targets will trigger notifications. Common values: `production`, `preview`.
 
 </Step>
 <Step>

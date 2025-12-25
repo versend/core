@@ -1,5 +1,6 @@
 import type { WebhookType } from "@/schemas/vercel";
-import type { StateProperty } from "./types";
+
+type StateProperty = "color" | "emoji";
 
 export const BOT_NAME = "Versend";
 export const BOT_AVATAR =
