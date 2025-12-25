@@ -3,7 +3,6 @@
   "pages": [
     "requirements",
     "deploy",
-    "setup-discord",
     "setup-upstash",
     "setup-vercel",
     "environment"
