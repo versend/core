@@ -1,21 +1,33 @@
 ---
 title: Introduction
-description: Real-time Vercel deployment notifications for Discord
+description: Real-time Vercel deployment notifications for Discord, Telegram, and more
 icon: House
 ---
 
-# Vercel to Discord
+# Vercord
 
-A lightweight integration service that connects Vercel deployments with Discord,
-delivering real-time status notifications to your team channels. Enhance your
-DevOps workflow with immediate visibility into your deployment pipeline.
+A lightweight webhook relay that sends Vercel deployment notifications to Discord, Telegram, or both. Self-host it in minutes.
 
-# Features
+## Features
 
-- Real-time deployment event notifications
-- Support for all Vercel webhook event types
-- Rich Discord embeds with status-specific colors and icons
-- Direct links to Vercel deployments, projects, and GitHub commits
-- Context-rich information including branch, commit, and environment details
-- Reliable delivery with retry mechanism for handling rate limits
-- Easily extensible for customization
+- **Multi-provider** — Discord, Telegram, or both simultaneously
+- **Real-time** — Notifications arrive within seconds
+- **All events** — Deployments, domains, projects, and more
+- **Rich formatting** — Embeds for Discord, HTML for Telegram
+- **Context-rich** — Branch, commit, environment, and links
+- **Reliable** — Automatic retry with backoff for rate limits
+- **Simple** — Deploy once, add env vars, done
+
+## Supported Providers
+
+| Provider | Format |
+|----------|--------|
+| [Discord](/docs/providers/discord) | Rich embeds with colors and fields |
+| [Telegram](/docs/providers/telegram) | HTML messages via Bot API |
+
+## Quick Start
+
+1. [Deploy to Vercel](/docs/installation/deploy)
+2. [Setup a provider](/docs/providers) (Discord, Telegram, or both)
+3. [Configure Vercel webhook](/docs/installation/setup-vercel)
+4. Done!

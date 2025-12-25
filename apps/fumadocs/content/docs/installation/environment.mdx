@@ -19,15 +19,10 @@ Go to your Vercord deployment in Vercel → **Settings** → **Environment Varia
 </Step>
 <Step>
 
-### Add the Required Variables
+### Add the Required Variable
 
 <TypeTable
   type={{
-    DISCORD_WEBHOOK_URL: {
-      description: 'The Discord webhook URL you copied earlier',
-      type: 'string',
-      required: true,
-    },
     WEBHOOK_INTEGRATION_SECRET: {
       description: 'The signing secret from Vercel webhook',
       type: 'string',
@@ -39,32 +34,65 @@ Go to your Vercord deployment in Vercel → **Settings** → **Environment Varia
 </Step>
 <Step>
 
-### Add Optional Variables (if desired)
+### Add Provider Variables
+
+Add the variables for at least one provider. See the [Providers](/docs/providers) section for details.
+
+**Discord:**
 
 <TypeTable
   type={{
-    UPSTASH_REDIS_REST_URL: {
-      description: 'Upstash Redis REST URL for rate limiting',
-      type: 'string',
-    },
-    UPSTASH_REDIS_REST_TOKEN: {
-      description: 'Upstash Redis REST token for rate limiting',
+    DISCORD_WEBHOOK_URL: {
+      description: 'Discord webhook URL',
       type: 'string',
     },
     DISCORD_WEBHOOK_USERNAME: {
-      description: 'Custom username for the webhook bot',
+      description: 'Custom bot username',
       type: 'string',
       default: 'Vercord',
     },
     DISCORD_WEBHOOK_AVATAR_URL: {
-      description: 'Custom avatar URL for the webhook bot',
+      description: 'Custom bot avatar URL',
+      type: 'string',
+    },
+  }}
+/>
+
+**Telegram:**
+
+<TypeTable
+  type={{
+    TELEGRAM_BOT_TOKEN: {
+      description: 'Bot token from @BotFather',
+      type: 'string',
+    },
+    TELEGRAM_CHAT_ID: {
+      description: 'Chat/group/channel ID',
+      type: 'string',
+    },
+  }}
+/>
+
+</Step>
+<Step>
+
+### Add Rate Limiting (Optional)
+
+<TypeTable
+  type={{
+    UPSTASH_REDIS_REST_URL: {
+      description: 'Upstash Redis REST URL',
+      type: 'string',
+    },
+    UPSTASH_REDIS_REST_TOKEN: {
+      description: 'Upstash Redis REST token',
       type: 'string',
     },
   }}
 />
 
 <Callout type="warn">
-  Rate limiting is enabled automatically when both Upstash variables are set. Without them, your endpoint has no protection against abuse. See [Setup Upstash](/docs/installation/setup-upstash) for details.
+  Rate limiting is enabled automatically when both Upstash variables are set. See [Setup Upstash](/docs/installation/setup-upstash) for details.
 </Callout>
 
 </Step>

@@ -1,0 +1,36 @@
+---
+title: Providers
+description: Send notifications to Discord, Telegram, or both
+icon: Send
+---
+
+# Providers
+
+Vercord supports multiple notification providers. Configure the ones you want — notifications are sent to all enabled providers in parallel.
+
+## Available Providers
+
+| Provider | Status | Description |
+|----------|--------|-------------|
+| [Discord](/docs/providers/discord) | ✅ Stable | Rich embeds with colors, fields, and links |
+| [Telegram](/docs/providers/telegram) | ✅ Stable | HTML-formatted messages via Bot API |
+
+## How It Works
+
+Each provider is **auto-enabled** when its required environment variables are set:
+
+- **Discord**: Set `DISCORD_WEBHOOK_URL` → Discord enabled
+- **Telegram**: Set `TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID` → Telegram enabled
+
+You can enable one, both, or add more providers in the future.
+
+<Callout type="info">
+  You need at least one provider configured for Vercord to send notifications.
+</Callout>
+
+## Adding a Provider
+
+1. Choose a provider from the list above
+2. Follow the setup guide to get the required credentials
+3. Add the environment variables to your Vercel project
+4. Redeploy — that's it!

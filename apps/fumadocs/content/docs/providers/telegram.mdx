@@ -1,0 +1,103 @@
+---
+title: Telegram
+description: Send deployment notifications to Telegram
+icon: Send
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { TypeTable } from 'fumadocs-ui/components/type-table';
+
+# Telegram Provider
+
+Send HTML-formatted notifications to any Telegram chat, group, or channel.
+
+## Features
+
+- Clean HTML formatting with bold, code blocks, and links
+- Works with private chats, groups, and channels
+- Branch, commit, and deployment URL display
+- Build error details for failed deployments
+- Automatic retry with backoff for rate limits
+
+## Setup
+
+<Steps>
+<Step>
+
+### Create a Telegram Bot
+
+1. Open Telegram and search for [@BotFather](https://t.me/BotFather)
+2. Send `/newbot` and follow the prompts
+3. Copy the **bot token** (looks like `123456789:ABCdefGHI...`)
+
+</Step>
+<Step>
+
+### Get Your Chat ID
+
+**For a private chat:**
+1. Start a conversation with your bot
+2. Send any message to the bot
+3. Visit `https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates`
+4. Find `"chat":{"id":123456789}` — that's your chat ID
+
+**For a group:**
+1. Add the bot to your group
+2. Send a message in the group
+3. Visit the getUpdates URL above
+4. Find the negative chat ID (e.g., `-1001234567890`)
+
+**For a channel:**
+1. Add the bot as an admin to your channel
+2. The chat ID is `@yourchannel` or the numeric ID
+
+</Step>
+<Step>
+
+### Add Environment Variables
+
+Add these to your Vercel project:
+
+<TypeTable
+  type={{
+    TELEGRAM_BOT_TOKEN: {
+      description: 'Bot token from BotFather',
+      type: 'string',
+      required: true,
+    },
+    TELEGRAM_CHAT_ID: {
+      description: 'Chat/group/channel ID to send messages to',
+      type: 'string',
+      required: true,
+    },
+  }}
+/>
+
+</Step>
+<Step>
+
+### Redeploy
+
+Redeploy your Vercord instance to apply the changes.
+
+</Step>
+</Steps>
+
+## Example Output
+
+A successful deployment notification looks like:
+
+```
+✅ Deployment succeeded
+
+Project: myapp
+Environment: production
+🌿 Branch: main
+📝 Commit: abc1234
+
+feat: add new feature
+
+🌐 View Deployment
+```
+
+Links are clickable and the message uses Telegram's HTML formatting.

@@ -1,0 +1,89 @@
+---
+title: Discord
+description: Send deployment notifications to Discord
+icon: MessageSquare
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { TypeTable } from 'fumadocs-ui/components/type-table';
+
+# Discord Provider
+
+Send rich embed notifications to any Discord channel via webhooks.
+
+## Features
+
+- Rich embeds with status-specific colors (green for success, red for errors, etc.)
+- Clickable links to deployments, commits, and projects
+- Branch, commit SHA, and commit message display
+- Build error details for failed deployments
+- Automatic retry with backoff for rate limits
+
+## Setup
+
+<Steps>
+<Step>
+
+### Create a Discord Webhook
+
+1. In your Discord server, right-click the channel → **Edit Channel**
+2. Go to **Integrations** → **Webhooks**
+3. Click **New Webhook** and name it (e.g., `Vercord`)
+4. Click **Copy Webhook URL**
+
+</Step>
+<Step>
+
+### Add Environment Variables
+
+Add these to your Vercel project:
+
+<TypeTable
+  type={{
+    DISCORD_WEBHOOK_URL: {
+      description: 'The webhook URL you just copied',
+      type: 'string',
+      required: true,
+    },
+    DISCORD_WEBHOOK_USERNAME: {
+      description: 'Custom bot username',
+      type: 'string',
+      default: 'Vercord',
+    },
+    DISCORD_WEBHOOK_AVATAR_URL: {
+      description: 'Custom bot avatar URL',
+      type: 'string',
+    },
+  }}
+/>
+
+</Step>
+<Step>
+
+### Redeploy
+
+Redeploy your Vercord instance to apply the changes.
+
+</Step>
+</Steps>
+
+## Example Output
+
+A successful deployment notification looks like:
+
+```
+✅ Deployment succeeded
+
+**myapp** deployed to **production**
+
+🌿 Branch: main
+📝 Commit: abc1234
+🔗 Environment: production
+
+💬 Commit Message:
+feat: add new feature
+
+🌐 Preview URL: myapp-abc123.vercel.app
+```
+
+The embed includes clickable links and is color-coded based on the deployment status.
