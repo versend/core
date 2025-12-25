@@ -1,13 +1,6 @@
-import type { Embed } from "@vermaysha/discord-webhook";
-
-import { createEmbedFromWebhook } from "@/discord/embed-factory";
-import { sendWebhook } from "@/discord/webhook-sender";
+import { providers } from "@/providers/registry";
 import type { VercelWebhook } from "@/schemas/vercel";
 
-export function createMessageFromWebhook(webhook: VercelWebhook): Embed {
-  return createEmbedFromWebhook(webhook);
-}
-
-export function sendDiscordNotification(embed: Embed): Promise<void> {
-  return sendWebhook(embed);
+export async function sendNotifications(webhook: VercelWebhook): Promise<void> {
+  await Promise.all(providers.map((provider) => provider.send(webhook)));
 }

@@ -2,10 +2,7 @@ import { after } from "next/server";
 import { ZodError } from "zod/v4";
 
 import HttpStatusCode from "@/enums/http-status-codes";
-import {
-  createMessageFromWebhook,
-  sendDiscordNotification,
-} from "@/lib/notify";
+import { sendNotifications } from "@/lib/notify";
 import { checkRateLimit, getClientIp } from "@/lib/ratelimit";
 import { verifySignature } from "@/lib/verify";
 import { webhookSchema } from "@/schemas/vercel";
@@ -36,8 +33,7 @@ export async function POST(req: Request) {
     const payload = JSON.parse(rawBody) as unknown;
     const webhook = webhookSchema.parse(payload);
 
-    const embed = createMessageFromWebhook(webhook);
-    after(() => sendDiscordNotification(embed));
+    after(() => sendNotifications(webhook));
 
     return Response.json({ success: true, message: "Webhook processed" });
   } catch (error) {

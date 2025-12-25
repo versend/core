@@ -20,12 +20,4 @@ export type DiscordMessage = {
   avatar_url?: string;
 };
 
-/**
- * Represents a single field in a Discord embed
- */
-export type DiscordEmbedField = NonNullable<DiscordEmbed["fields"]>[number];
-
-/**
- * Types of state properties that can be mapped to webhook types
- */
 export type StateProperty = "color" | "emoji";

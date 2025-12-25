@@ -1,10 +1,24 @@
 import { Embed } from "@vermaysha/discord-webhook";
 
-import { DEFAULT_AVATAR_URL, EMOJIS, getStateProperty } from "@/consts/discord";
 import { env } from "@/env";
 import type { Deployment, Links, VercelWebhook } from "@/schemas/vercel";
+import { DEFAULT_AVATAR_URL, EMOJIS, getStateProperty } from "./consts";
 
-export function createDeploymentEmbed(webhook: VercelWebhook): Embed {
+type EmbedCreator = (webhook: VercelWebhook) => Embed;
+
+const EMBED_CREATORS: Record<string, EmbedCreator> = {
+  deployment: createDeploymentEmbed,
+  domain: createDomainEmbed,
+  project: createProjectEmbed,
+};
+
+export function formatWebhook(webhook: VercelWebhook): Embed {
+  const typePrefix = webhook.type.split(".")[0];
+  const creator = EMBED_CREATORS[typePrefix];
+  return creator ? creator(webhook) : createGenericEmbed(webhook);
+}
+
+function createDeploymentEmbed(webhook: VercelWebhook): Embed {
   const { deployment, links } = webhook.payload;
   if (!(deployment && links)) {
     return createGenericEmbed(webhook);
@@ -13,9 +27,8 @@ export function createDeploymentEmbed(webhook: VercelWebhook): Embed {
   const state = webhook.type.split(".")[1];
   const embed = new Embed();
 
-  setBasicEmbedProperties(embed, webhook, `Deployment ${state}`);
+  setBasicProperties(embed, webhook, `Deployment ${state}`);
 
-  // Make the title clickable for all deployment events
   if (links.deployment) {
     embed.setUrl(links.deployment);
   }
@@ -26,45 +39,37 @@ export function createDeploymentEmbed(webhook: VercelWebhook): Embed {
   return embed;
 }
 
-export function createDomainEmbed(webhook: VercelWebhook): Embed {
+function createDomainEmbed(webhook: VercelWebhook): Embed {
   const { domain } = webhook.payload;
   if (!domain) {
     return createGenericEmbed(webhook);
   }
 
   const embed = new Embed();
-  setBasicEmbedProperties(
-    embed,
-    webhook,
-    `Domain ${webhook.type.split(".")[1]}`
-  );
+  setBasicProperties(embed, webhook, `Domain ${webhook.type.split(".")[1]}`);
   embed.setDescription(`**Domain**: ${domain.name}`);
 
   return embed;
 }
 
-export function createProjectEmbed(webhook: VercelWebhook): Embed {
+function createProjectEmbed(webhook: VercelWebhook): Embed {
   const { project } = webhook.payload;
   if (!project) {
     return createGenericEmbed(webhook);
   }
 
   const embed = new Embed();
-  setBasicEmbedProperties(
-    embed,
-    webhook,
-    `Project ${webhook.type.split(".")[1]}`
-  );
+  setBasicProperties(embed, webhook, `Project ${webhook.type.split(".")[1]}`);
   embed.setDescription(`**Project**: ${project.id}`);
 
   return embed;
 }
 
-export function createGenericEmbed(webhook: VercelWebhook): Embed {
+function createGenericEmbed(webhook: VercelWebhook): Embed {
   const embed = new Embed();
   const formattedEvent = formatEventName(webhook.type);
 
-  setBasicEmbedProperties(embed, webhook, formattedEvent);
+  setBasicProperties(embed, webhook, formattedEvent);
   embed.setDescription(
     `Webhook event received at ${new Date(webhook.createdAt).toISOString()}`
   );
@@ -76,7 +81,7 @@ export function createGenericEmbed(webhook: VercelWebhook): Embed {
   return embed;
 }
 
-function setBasicEmbedProperties(
+function setBasicProperties(
   embed: Embed,
   webhook: VercelWebhook,
   title: string
@@ -100,13 +105,10 @@ function setDeploymentDescription(
   deployment: Deployment
 ): void {
   const meta = deployment?.meta;
-
-  // Clean, focused description without cramming everything
   let description = `**${deployment.name}** deployed to **${meta?.target || "production"}**`;
 
-  // Add build error if exists (truncated for Discord limits)
   if (webhook.type === "deployment.error" && meta?.buildError) {
-    const maxErrorLength = 500; // Leave room for other content
+    const maxErrorLength = 500;
     const errorText =
       meta.buildError.length > maxErrorLength
         ? `${meta.buildError.slice(0, maxErrorLength)}...`
@@ -125,7 +127,6 @@ function addDeploymentFields(
 ): void {
   const meta = deployment?.meta;
 
-  // Add GitHub branch and commit info with proper spacing - 3 inline fields per row
   if (meta?.githubCommitRef && meta?.githubCommitSha) {
     const commitUrl = `https://github.com/${meta.githubCommitOrg}/${meta.githubCommitRepo}/commit/${meta.githubCommitSha}`;
     const shortSha = meta.githubCommitSha.slice(0, 7);
@@ -142,7 +143,6 @@ function addDeploymentFields(
       inline: true,
     });
 
-    // Add environment in the third column to complete the row
     embed.addField({
       name: `\`${EMOJIS.ENV}\` Environment`,
       value: meta?.target || "production",
@@ -150,9 +150,8 @@ function addDeploymentFields(
     });
   }
 
-  // Always add commit message if it exists, with Discord field limit (1024 chars)
   if (meta?.githubCommitMessage) {
-    const maxCommitLength = 1000; // Leave some buffer for formatting
+    const maxCommitLength = 1000;
     const commitMessage =
       meta.githubCommitMessage.length > maxCommitLength
         ? `${meta.githubCommitMessage.slice(0, maxCommitLength)}...`
@@ -165,7 +164,6 @@ function addDeploymentFields(
     });
   }
 
-  // Add deployment URL if available - full width for better readability
   if (links?.deployment) {
     const isLive =
       webhookType === "deployment.succeeded" ||
@@ -180,7 +178,6 @@ function addDeploymentFields(
     });
   }
 
-  // Clean footer with deployment ID
   if (deployment.id) {
     embed.setFooter({
       text: `Deployment ID: ${deployment.id}`,
