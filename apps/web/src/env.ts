@@ -15,6 +15,8 @@ export const env = createEnv({
     // Rate limiting
     UPSTASH_REDIS_REST_URL: string().url().optional(),
     UPSTASH_REDIS_REST_TOKEN: string().optional(),
+    // Filtering
+    FILTER_EVENTS: string().optional(),
   },
   client: {},
   runtimeEnv: {
@@ -25,6 +27,7 @@ export const env = createEnv({
     SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL,
     UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
     UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
+    FILTER_EVENTS: process.env.FILTER_EVENTS,
   },
   extends: [vercel()],
 });

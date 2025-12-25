@@ -100,6 +100,25 @@ Add the variables for at least one provider. See the [Providers](/docs/providers
 </Step>
 <Step>
 
+### Add Event Filtering (Optional)
+
+<TypeTable
+  type={{
+    FILTER_EVENTS: {
+      description: 'Comma-separated list of event types to allow',
+      type: 'string',
+      default: 'all events',
+    },
+  }}
+/>
+
+Example: `FILTER_EVENTS=deployment.error,deployment.succeeded,deployment.ready`
+
+If set, only the specified events will trigger notifications. If not set, all events pass through.
+
+</Step>
+<Step>
+
 ### Redeploy
 
 Go to **Deployments** and click the three dots on the latest deployment →
