@@ -1,6 +1,6 @@
 ---
 title: Providers
-description: Send notifications to Discord, Telegram, or both
+description: Send notifications to your preferred platforms
 icon: Send
 ---
 
@@ -19,14 +19,9 @@ Versend supports multiple notification providers. Configure one or many — noti
 
 ## How It Works
 
-Each provider is **auto-enabled** when its required environment variables are set:
+Each provider is **auto-enabled** when its required environment variables are set. No code changes needed — just add the env vars and redeploy.
 
-- **Discord**: Set `DISCORD_WEBHOOK_URL` → Discord enabled
-- **Slack**: Set `SLACK_WEBHOOK_URL` → Slack enabled
-- **Telegram**: Set `TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID` → Telegram enabled
-- **Webhook**: Set `WEBHOOK_URL` → Generic webhook enabled
-
-Enable as many as you need.
+Enable as many providers as you need. Notifications are sent to all enabled providers in parallel.
 
 <Callout type="info">
   You need at least one provider configured for Versend to send notifications.

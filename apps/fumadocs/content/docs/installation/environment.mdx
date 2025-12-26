@@ -36,55 +36,9 @@ Go to your Versend deployment in Vercel → **Settings** → **Environment Varia
 
 ### Add Provider Variables
 
-Add the variables for at least one provider. See the [Providers](/docs/providers) section for details.
+Add the environment variables for at least one provider. Each provider page includes the required variables:
 
-**Discord:**
-
-<TypeTable
-  type={{
-    DISCORD_WEBHOOK_URL: {
-      description: 'Discord webhook URL',
-      type: 'string',
-    },
-  }}
-/>
-
-**Slack:**
-
-<TypeTable
-  type={{
-    SLACK_WEBHOOK_URL: {
-      description: 'Slack incoming webhook URL',
-      type: 'string',
-    },
-  }}
-/>
-
-**Telegram:**
-
-<TypeTable
-  type={{
-    TELEGRAM_BOT_TOKEN: {
-      description: 'Bot token from @BotFather',
-      type: 'string',
-    },
-    TELEGRAM_CHAT_ID: {
-      description: 'Chat/group/channel ID',
-      type: 'string',
-    },
-  }}
-/>
-
-**Generic Webhook:**
-
-<TypeTable
-  type={{
-    WEBHOOK_URL: {
-      description: 'URL to forward raw webhook payloads to',
-      type: 'string',
-    },
-  }}
-/>
+→ [View all providers](/docs/providers)
 
 </Step>
 <Step>
