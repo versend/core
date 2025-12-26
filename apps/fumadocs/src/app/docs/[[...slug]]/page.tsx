@@ -8,8 +8,8 @@ import {
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { LLMCopyButton, ViewOptions } from "@/components/page-actions";
+import { getMDXComponents } from "@/lib/mdx-components";
 import { getPageImage, source } from "@/lib/source";
-import { getMDXComponents } from "@/mdx-components";
 
 type PageProps = {
   params: Promise<{ slug?: string[] }>;
