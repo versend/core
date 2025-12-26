@@ -116,16 +116,31 @@ Add the variables for at least one provider. See the [Providers](/docs/providers
 <TypeTable
   type={{
     FILTER_EVENTS: {
-      description: 'Comma-separated list of event types to allow',
+      description: 'Comma-separated allowlist of event types',
       type: 'string',
       default: 'all events',
+    },
+    FILTER_EVENTS_EXCLUDE: {
+      description: 'Comma-separated denylist of event types',
+      type: 'string',
+      default: 'none',
     },
   }}
 />
 
-Example: `FILTER_EVENTS=deployment.error,deployment.succeeded,deployment.ready`
+**Exclude noisy events:**
+```
+FILTER_EVENTS_EXCLUDE=deployment.cleanup
+```
 
-If set, only the specified events will trigger notifications. If not set, all events pass through.
+**Only allow specific events:**
+```
+FILTER_EVENTS=deployment.error,deployment.succeeded,deployment.ready
+```
+
+<Callout type="info">
+  `FILTER_EVENTS_EXCLUDE` takes priority over `FILTER_EVENTS`. An event in the exclude list is always blocked, even if it's in the allow list.
+</Callout>
 
 </Step>
 <Step>

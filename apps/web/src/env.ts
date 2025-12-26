@@ -19,6 +19,7 @@ export const env = createEnv({
     UPSTASH_REDIS_REST_TOKEN: string().optional(),
     // Filtering
     FILTER_EVENTS: string().optional(),
+    FILTER_EVENTS_EXCLUDE: string().optional(),
     FILTER_TARGETS: string().optional(),
   },
   client: {},
@@ -32,6 +33,7 @@ export const env = createEnv({
     UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
     UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
     FILTER_EVENTS: process.env.FILTER_EVENTS,
+    FILTER_EVENTS_EXCLUDE: process.env.FILTER_EVENTS_EXCLUDE,
     FILTER_TARGETS: process.env.FILTER_TARGETS,
   },
   extends: [vercel()],

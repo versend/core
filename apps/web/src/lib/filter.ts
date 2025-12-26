@@ -5,16 +5,24 @@ const allowedEvents: Set<string> | null = env.FILTER_EVENTS
   ? new Set(env.FILTER_EVENTS.split(",").map((e) => e.trim()))
   : null;
 
+const excludedEvents: Set<string> | null = env.FILTER_EVENTS_EXCLUDE
+  ? new Set(env.FILTER_EVENTS_EXCLUDE.split(",").map((e) => e.trim()))
+  : null;
+
 const allowedTargets: Set<string> | null = env.FILTER_TARGETS
   ? new Set(env.FILTER_TARGETS.split(",").map((t) => t.trim().toLowerCase()))
   : null;
 
 /**
  * Check if an event type should trigger notifications.
- * If FILTER_EVENTS is not set, all events are allowed.
- * If set, only events in the comma-separated list are allowed.
+ * - FILTER_EVENTS_EXCLUDE takes priority (denylist)
+ * - FILTER_EVENTS is checked second (allowlist)
+ * - If neither is set, all events are allowed
  */
 export function isEventAllowed(type: WebhookType): boolean {
+  if (excludedEvents?.has(type)) {
+    return false;
+  }
   if (!allowedEvents) {
     return true;
   }
