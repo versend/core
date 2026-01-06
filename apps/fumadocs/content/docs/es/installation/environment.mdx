@@ -1,0 +1,134 @@
+---
+title: Variables de Entorno
+description: Configura las variables de entorno y finaliza la configuración
+icon: Settings
+---
+
+import { DynamicLink } from 'fumadocs-core/dynamic-link';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { TypeTable } from 'fumadocs-ui/components/type-table';
+
+# Variables de Entorno
+
+<Steps>
+<Step>
+
+### Abre la Configuración de tu Proyecto Versend
+
+Ve a tu despliegue de Versend en Vercel → **Settings** → **Environment Variables**.
+
+</Step>
+<Step>
+
+### Añade la Variable Requerida
+
+<TypeTable
+  type={{
+    WEBHOOK_INTEGRATION_SECRET: {
+      description: 'El secreto de firma del webhook de Vercel',
+      type: 'string',
+      required: true,
+    },
+  }}
+/>
+
+</Step>
+<Step>
+
+### Añade Variables del Proveedor
+
+Añade las variables de entorno para al menos un proveedor. Cada página de proveedor incluye las variables requeridas:
+
+→ <DynamicLink href="/[lang]/docs/providers">Ver todos los proveedores</DynamicLink>
+
+</Step>
+<Step>
+
+### Añade Límite de Tasa (Opcional)
+
+<TypeTable
+  type={{
+    UPSTASH_REDIS_REST_URL: {
+      description: 'URL REST de Upstash Redis',
+      type: 'string',
+    },
+    UPSTASH_REDIS_REST_TOKEN: {
+      description: 'Token REST de Upstash Redis',
+      type: 'string',
+    },
+  }}
+/>
+
+<Callout type="warn">
+  El límite de tasa se habilita automáticamente cuando ambas variables de Upstash están configuradas. Ver <DynamicLink href="/[lang]/docs/installation/setup-upstash">Configurar Upstash</DynamicLink> para más detalles.
+</Callout>
+
+</Step>
+<Step>
+
+### Añade Filtrado de Eventos (Opcional)
+
+<TypeTable
+  type={{
+    FILTER_EVENTS: {
+      description: 'Lista de tipos de eventos permitidos separados por comas',
+      type: 'string',
+      default: 'todos los eventos',
+    },
+    FILTER_EVENTS_EXCLUDE: {
+      description: 'Lista de tipos de eventos bloqueados separados por comas',
+      type: 'string',
+      default: 'ninguno',
+    },
+  }}
+/>
+
+**Excluir eventos ruidosos:**
+```
+FILTER_EVENTS_EXCLUDE=deployment.cleanup
+```
+
+**Solo permitir eventos específicos:**
+```
+FILTER_EVENTS=deployment.error,deployment.succeeded,deployment.ready
+```
+
+<Callout type="info">
+  `FILTER_EVENTS_EXCLUDE` tiene prioridad sobre `FILTER_EVENTS`. Un evento en la lista de exclusión siempre se bloquea, incluso si está en la lista de permitidos.
+</Callout>
+
+</Step>
+<Step>
+
+### Añade Filtrado de Destino (Opcional)
+
+<TypeTable
+  type={{
+    FILTER_TARGETS: {
+      description: 'Lista de destinos de despliegue a permitir separados por comas',
+      type: 'string',
+      default: 'todos los destinos',
+    },
+  }}
+/>
+
+Ejemplo: `FILTER_TARGETS=production`
+
+Si se configura, solo los despliegues a los destinos especificados activarán notificaciones. Valores comunes: `production`, `preview`.
+
+</Step>
+<Step>
+
+### Redespliega
+
+Ve a **Deployments** y haz clic en los tres puntos del último despliegue →
+**Redeploy**.
+
+</Step>
+</Steps>
+
+## ¡Listo!
+
+Tu instancia de Versend ahora está lista. Activa un despliegue en cualquier
+proyecto monitoreado para probar la integración.
+

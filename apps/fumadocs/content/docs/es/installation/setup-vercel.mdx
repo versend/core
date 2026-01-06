@@ -1,0 +1,60 @@
+---
+title: Configurar Webhook de Vercel
+description: Configura un webhook de Vercel para enviar eventos de despliegue a Versend
+icon: Webhook
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+# Configurar Webhook de Vercel
+
+Ahora configura Vercel para enviar eventos de despliegue a tu instancia de Versend.
+
+<Steps>
+<Step>
+
+### Abre la Configuración de Webhooks
+
+Ve a tu Panel de Vercel → **Settings** → **Webhooks** (a nivel de cuenta,
+equipo o proyecto dependiendo de lo que quieras monitorear).
+
+</Step>
+<Step>
+
+### Crea un Nuevo Webhook
+
+Haz clic en **Create Webhook** y configura:
+
+- **Endpoint URL**: `https://tu-dominio.vercel.app/api/hook`
+- **Events**: Selecciona los eventos de despliegue que quieres recibir
+
+Reemplaza `tu-dominio.vercel.app` con el dominio real de tu despliegue de Versend.
+
+</Step>
+<Step>
+
+### Guarda el Secreto
+
+Después de crear el webhook, Vercel te mostrará un **signing secret**.
+
+<Callout type="warn">
+  Copia este secreto inmediatamente — lo necesitarás para la
+  variable de entorno `WEBHOOK_INTEGRATION_SECRET`.
+</Callout>
+
+</Step>
+</Steps>
+
+## Filtrado por Proyecto
+
+Puedes filtrar qué proyectos activan notificaciones eligiendo dónde crear el webhook:
+
+- **Nivel de cuenta/equipo**: Recibe eventos de **todos** los proyectos en la cuenta/equipo
+- **Nivel de proyecto**: Recibe eventos de **solo ese proyecto**
+
+<Callout type="warn">
+  Cada instancia de Versend solo puede tener **un** secreto de webhook. Si necesitas monitorear múltiples proyectos específicos (pero no todos), crea el webhook a nivel de cuenta/equipo y todos los proyectos serán monitoreados.
+</Callout>
+
+Para monitorear un solo proyecto, crea el webhook directamente en la configuración de ese proyecto.
+

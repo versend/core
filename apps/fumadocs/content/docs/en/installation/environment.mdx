@@ -4,6 +4,7 @@ description: Configure environment variables and finish setup
 icon: Settings
 ---
 
+import { DynamicLink } from 'fumadocs-core/dynamic-link';
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 import { TypeTable } from 'fumadocs-ui/components/type-table';
 
@@ -38,7 +39,7 @@ Go to your Versend deployment in Vercel → **Settings** → **Environment Varia
 
 Add the environment variables for at least one provider. Each provider page includes the required variables:
 
-→ [View all providers](/docs/providers)
+→ <DynamicLink href="/[lang]/docs/providers">View all providers</DynamicLink>
 
 </Step>
 <Step>
@@ -59,7 +60,7 @@ Add the environment variables for at least one provider. Each provider page incl
 />
 
 <Callout type="warn">
-  Rate limiting is enabled automatically when both Upstash variables are set. See [Setup Upstash](/docs/installation/setup-upstash) for details.
+  Rate limiting is enabled automatically when both Upstash variables are set. See <DynamicLink href="/[lang]/docs/installation/setup-upstash">Setup Upstash</DynamicLink> for details.
 </Callout>
 
 </Step>

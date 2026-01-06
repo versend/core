@@ -1,0 +1,34 @@
+---
+title: Desplegar en Vercel
+description: Despliega el servicio relay de Versend en Vercel
+icon: Rocket
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+# Desplegar en Vercel
+
+<Steps>
+<Step>
+
+### Despliega el Repositorio
+
+[Haz clic aquí para desplegar Versend en tu cuenta de Vercel](https://vercel.com/new/clone?repository-url=https://github.com/versend/core/tree/master/apps/web)
+
+</Step>
+<Step>
+
+### Anota Tu Dominio
+
+Después del despliegue, anota el dominio de tu proyecto (ej: `tu-proyecto.vercel.app`).
+
+<Callout>
+  Necesitarás este dominio más tarde cuando configures el endpoint del webhook de Vercel.
+</Callout>
+
+</Step>
+</Steps>
+
+El despliegue fallará inicialmente porque las variables de entorno no están configuradas todavía.
+Eso es esperado — continúa con los siguientes pasos.
+

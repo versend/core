@@ -1,0 +1,20 @@
+---
+title: Requisitos
+description: Lo que necesitas antes de configurar Versend
+icon: ListCheck
+---
+
+import { DynamicLink } from 'fumadocs-core/dynamic-link';
+
+# Requisitos
+
+Antes de configurar Versend, asegúrate de tener:
+
+1. Una **cuenta de Vercel** con al menos un proyecto que quieras monitorear
+2. Al menos un <DynamicLink href="/[lang]/docs/providers">proveedor de notificaciones</DynamicLink> configurado
+3. (Opcional) Una **cuenta de Upstash** para limitar la tasa de peticiones
+
+<Callout type="warn">
+  Sin límite de tasa, tu endpoint está expuesto a abusos y spam. Se recomienda usar límite de tasa en producción.
+</Callout>
+

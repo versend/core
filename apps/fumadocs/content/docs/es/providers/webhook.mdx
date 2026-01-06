@@ -1,0 +1,95 @@
+---
+title: Webhook Genérico
+description: Reenvía eventos de Vercel a cualquier URL
+icon: Globe
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { TypeTable } from 'fumadocs-ui/components/type-table';
+
+# Proveedor Webhook Genérico
+
+Reenvía el payload crudo del webhook de Vercel a cualquier endpoint HTTP. Perfecto para integrar con Zapier, n8n, Make, o tus propios servicios.
+
+## Características
+
+- Reenvía el payload completo del webhook de Vercel como JSON
+- Añade el header `X-Versend-Event` con el tipo de evento
+- Reintento automático con backoff para fallos
+- Funciona con cualquier endpoint HTTP que acepte peticiones POST
+
+## Configuración
+
+<Steps>
+<Step>
+
+### Obtén Tu URL de Webhook
+
+Configura un endpoint para recibir webhooks. Puede ser:
+
+- **Zapier**: Crea un Zap con el trigger "Webhooks by Zapier"
+- **n8n**: Crea un workflow con el nodo trigger "Webhook"
+- **Make**: Crea un escenario con el módulo "Webhooks"
+- **Personalizado**: Cualquier URL que acepte peticiones POST con cuerpo JSON
+
+</Step>
+<Step>
+
+### Añade Variable de Entorno
+
+Añade esto a tu proyecto de Vercel:
+
+<TypeTable
+  type={{
+    WEBHOOK_URL: {
+      description: 'URL a la que reenviar webhooks',
+      type: 'string',
+      required: true,
+    },
+  }}
+/>
+
+</Step>
+<Step>
+
+### Redespliega
+
+Redespliega tu instancia de Versend para aplicar los cambios.
+
+</Step>
+</Steps>
+
+## Formato del Payload
+
+El endpoint recibe el payload crudo del webhook de Vercel:
+
+```json
+{
+  "id": "webhook_xxx",
+  "type": "deployment.succeeded",
+  "createdAt": 1234567890,
+  "payload": {
+    "deployment": { ... },
+    "links": { ... },
+    ...
+  }
+}
+```
+
+## Headers
+
+Cada petición incluye:
+
+| Header | Descripción |
+|--------|-------------|
+| `Content-Type` | `application/json` |
+| `User-Agent` | `Versend/1.0` |
+| `X-Versend-Event` | Tipo de evento (ej: `deployment.succeeded`) |
+
+## Casos de Uso
+
+- **Automatización Zapier/Make**: Activa workflows en despliegues
+- **Dashboards personalizados**: Agrega datos de despliegues
+- **Registro de auditoría**: Almacena todos los eventos de despliegue
+- **Fanout multi-servicio**: Reenvía a múltiples servicios internos
+

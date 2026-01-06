@@ -1,0 +1,58 @@
+---
+title: Configurar Upstash
+description: Configura Upstash Redis para límite de tasa
+icon: Database
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+# Configurar Upstash Redis
+
+Versend usa Upstash Redis para limitar la tasa de peticiones. Añade las credenciales y se habilita. Sin credenciales = sin límite de tasa.
+
+<Callout type="error">
+  **¿Saltándote este paso?** Sin límite de tasa, tu endpoint de webhook es vulnerable a:
+
+  - **Abuso**: Actores maliciosos pueden spamear tu endpoint
+  - **DDoS**: Tu endpoint puede ser sobrecargado por peticiones excesivas
+  - **Agotamiento de recursos**: Peticiones sin control aumentan los costos
+  - **Spam en Discord**: Peticiones excesivas podrían hacer que Discord deshabilite tu webhook
+
+  Solo sáltalo si tienes protección alternativa (Cloudflare, Vercel Firewall, etc.).
+</Callout>
+
+<Steps>
+<Step>
+
+### Crea una Cuenta de Upstash
+
+Ve a [console.upstash.com](https://console.upstash.com/) y regístrate o inicia sesión.
+
+</Step>
+<Step>
+
+### Crea una Base de Datos Redis
+
+Haz clic en **Create Database** y configura:
+
+- **Name**: Cualquier nombre (ej: `versend`)
+- **Region**: Elige la región más cercana a tu despliegue de Vercel (normalmente `us-east-1` para Vercel)
+- **Type**: Regional está bien
+
+</Step>
+<Step>
+
+### Copia las Credenciales
+
+En el panel de tu base de datos, encuentra la sección **REST API** y copia:
+
+- `UPSTASH_REDIS_REST_URL`
+- `UPSTASH_REDIS_REST_TOKEN`
+
+<Callout type="warn">
+  Guarda estos valores — los necesitarás para las variables de entorno.
+</Callout>
+
+</Step>
+</Steps>
+

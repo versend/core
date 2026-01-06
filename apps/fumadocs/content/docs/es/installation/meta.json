@@ -1,0 +1,10 @@
+{
+  "title": "Instalación",
+  "pages": [
+    "requirements",
+    "deploy",
+    "setup-upstash",
+    "setup-vercel",
+    "environment"
+  ]
+}

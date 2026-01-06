@@ -1,0 +1,104 @@
+---
+title: Telegram
+description: Envía notificaciones de despliegue a Telegram
+icon: Send
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { TypeTable } from 'fumadocs-ui/components/type-table';
+
+# Proveedor Telegram
+
+Envía notificaciones formateadas en HTML a cualquier chat, grupo o canal de Telegram.
+
+## Características
+
+- Formato HTML limpio con negritas, bloques de código y enlaces
+- Funciona con chats privados, grupos y canales
+- Muestra rama, commit y URL del despliegue
+- Detalles de errores de build para despliegues fallidos
+- Reintento automático con backoff para límites de tasa
+
+## Configuración
+
+<Steps>
+<Step>
+
+### Crea un Bot de Telegram
+
+1. Abre Telegram y busca [@BotFather](https://t.me/BotFather)
+2. Envía `/newbot` y sigue las instrucciones
+3. Copia el **token del bot** (se ve como `123456789:ABCdefGHI...`)
+
+</Step>
+<Step>
+
+### Obtén Tu Chat ID
+
+**Para un chat privado:**
+1. Inicia una conversación con tu bot
+2. Envía cualquier mensaje al bot
+3. Visita `https://api.telegram.org/bot<TU_TOKEN>/getUpdates`
+4. Encuentra `"chat":{"id":123456789}` — ese es tu chat ID
+
+**Para un grupo:**
+1. Añade el bot a tu grupo
+2. Envía un mensaje en el grupo
+3. Visita la URL getUpdates de arriba
+4. Encuentra el chat ID negativo (ej: `-1001234567890`)
+
+**Para un canal:**
+1. Añade el bot como administrador a tu canal
+2. El chat ID es `@tucanal` o el ID numérico
+
+</Step>
+<Step>
+
+### Añade Variables de Entorno
+
+Añade estas a tu proyecto de Vercel:
+
+<TypeTable
+  type={{
+    TELEGRAM_BOT_TOKEN: {
+      description: 'Token del bot de BotFather',
+      type: 'string',
+      required: true,
+    },
+    TELEGRAM_CHAT_ID: {
+      description: 'ID del chat/grupo/canal donde enviar mensajes',
+      type: 'string',
+      required: true,
+    },
+  }}
+/>
+
+</Step>
+<Step>
+
+### Redespliega
+
+Redespliega tu instancia de Versend para aplicar los cambios.
+
+</Step>
+</Steps>
+
+## Ejemplo de Salida
+
+Una notificación de despliegue exitoso se ve así:
+
+```
+✅ Despliegue exitoso
+
+Proyecto: myapp
+Entorno: production
+🌿 Rama: main
+📝 Commit: abc1234
+
+feat: añadir nueva característica
+
+🌐 Ver Despliegue
+```
+
+Los enlaces son clicables y el mensaje usa el formato HTML de Telegram.
+

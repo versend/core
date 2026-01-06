@@ -1,0 +1,90 @@
+---
+title: Slack
+description: Envía notificaciones de despliegue a Slack
+icon: Hash
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { TypeTable } from 'fumadocs-ui/components/type-table';
+
+# Proveedor Slack
+
+Envía notificaciones formateadas con Block Kit a cualquier canal de Slack via webhooks entrantes.
+
+## Características
+
+- Formato rico con Block Kit incluyendo secciones, campos y botones
+- Enlaces clicables a despliegues, commits y proyectos
+- Muestra rama, SHA del commit y mensaje del commit
+- Detalles de errores de build para despliegues fallidos
+- Reintento automático con backoff para límites de tasa
+
+## Configuración
+
+<Steps>
+<Step>
+
+### Crea una App de Slack
+
+1. Ve a [api.slack.com/apps](https://api.slack.com/apps) y haz clic en **Create New App**
+2. Elige **From scratch** y nómbrala (ej: `Versend`)
+3. Selecciona el workspace donde quieres las notificaciones
+
+</Step>
+<Step>
+
+### Habilita Webhooks Entrantes
+
+1. En la configuración de tu app, ve a **Incoming Webhooks**
+2. Activa **Activate Incoming Webhooks**
+3. Haz clic en **Add New Webhook to Workspace**
+4. Selecciona el canal para las notificaciones
+5. Copia la **Webhook URL**
+
+</Step>
+<Step>
+
+### Añade Variables de Entorno
+
+Añade esto a tu proyecto de Vercel:
+
+<TypeTable
+  type={{
+    SLACK_WEBHOOK_URL: {
+      description: 'La URL del webhook entrante que acabas de copiar',
+      type: 'string',
+      required: true,
+    },
+  }}
+/>
+
+</Step>
+<Step>
+
+### Redespliega
+
+Redespliega tu instancia de Versend para aplicar los cambios.
+
+</Step>
+</Steps>
+
+## Ejemplo de Salida
+
+Una notificación de despliegue exitoso se ve así:
+
+```
+✅ Despliegue exitoso
+
+**myapp** desplegado a **production**
+
+🌿 Rama           📝 Commit         ⚙️ Entorno
+`main`            `abc1234`         production
+
+Mensaje del Commit:
+feat: añadir nueva característica
+
+[Ver Despliegue]
+```
+
+El mensaje incluye botones clicables y usa el formato Block Kit de Slack para un diseño limpio y estructurado.
+

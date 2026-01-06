@@ -1,0 +1,14 @@
+{
+  "title": "documentación",
+  "pages": [
+    "index",
+    "installation",
+    "providers",
+    "llms",
+    "---Enlaces Útiles---",
+    "[ArrowUpRight][Vercel](https://vercel.com)",
+    "[ArrowUpRight][Discord](https://discord.com/app)",
+    "[ArrowUpRight][Telegram](https://telegram.org)",
+    "[ArrowUpRight][Upstash](https://upstash.com)"
+  ]
+}

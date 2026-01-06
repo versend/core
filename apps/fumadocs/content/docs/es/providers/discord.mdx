@@ -1,0 +1,81 @@
+---
+title: Discord
+description: Envía notificaciones de despliegue a Discord
+icon: MessageSquare
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { TypeTable } from 'fumadocs-ui/components/type-table';
+
+# Proveedor Discord
+
+Envía notificaciones con embeds ricos a cualquier canal de Discord via webhooks.
+
+## Características
+
+- Embeds ricos con colores específicos por estado (verde para éxito, rojo para errores, etc.)
+- Enlaces clicables a despliegues, commits y proyectos
+- Muestra rama, SHA del commit y mensaje del commit
+- Detalles de errores de build para despliegues fallidos
+- Reintento automático con backoff para límites de tasa
+
+## Configuración
+
+<Steps>
+<Step>
+
+### Crea un Webhook de Discord
+
+1. En tu servidor de Discord, haz clic derecho en el canal → **Editar Canal**
+2. Ve a **Integraciones** → **Webhooks**
+3. Haz clic en **Nuevo Webhook** y nómbralo (ej: `Versend`)
+4. Haz clic en **Copiar URL del Webhook**
+
+</Step>
+<Step>
+
+### Añade Variables de Entorno
+
+Añade estas a tu proyecto de Vercel:
+
+<TypeTable
+  type={{
+    DISCORD_WEBHOOK_URL: {
+      description: 'La URL del webhook que acabas de copiar',
+      type: 'string',
+      required: true,
+    },
+  }}
+/>
+
+</Step>
+<Step>
+
+### Redespliega
+
+Redespliega tu instancia de Versend para aplicar los cambios.
+
+</Step>
+</Steps>
+
+## Ejemplo de Salida
+
+Una notificación de despliegue exitoso se ve así:
+
+```
+✅ Despliegue exitoso
+
+**myapp** desplegado a **production**
+
+🌿 Rama: main
+📝 Commit: abc1234
+🔗 Entorno: production
+
+💬 Mensaje del Commit:
+feat: añadir nueva característica
+
+🌐 URL de Preview: myapp-abc123.vercel.app
+```
+
+El embed incluye enlaces clicables y tiene colores según el estado del despliegue.
+

@@ -1,0 +1,30 @@
+---
+title: Endpoints de Texto
+description: Obtén la documentación como texto plano para herramientas de IA
+icon: FileText
+---
+
+# Endpoints de Texto
+
+Dos endpoints para acceso programático al contenido de la documentación.
+
+## `/llms-full.txt`
+
+Devuelve **todas las páginas de documentación** combinadas en un solo archivo de texto.
+
+```
+https://docs.versend.io/llms-full.txt
+```
+
+Usa esto cuando quieras dar a una IA el contexto completo de la documentación.
+
+## Sufijo `.mdx`
+
+Añade `.mdx` a cualquier URL de página para obtener solo esa página como texto plano.
+
+```
+/docs/installation/requirements → /docs/installation/requirements.mdx
+```
+
+Usa esto cuando solo necesites contexto sobre un tema específico.
+

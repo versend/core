@@ -1,0 +1,4 @@
+{
+  "title": "Proveedores",
+  "pages": ["index", "discord", "slack", "telegram", "webhook"]
+}

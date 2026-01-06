@@ -1,0 +1,36 @@
+---
+title: Proveedores
+description: Envía notificaciones a tus plataformas preferidas
+icon: Send
+---
+
+# Proveedores
+
+Versend soporta múltiples proveedores de notificaciones. Configura uno o varios — las notificaciones se envían a todos los proveedores habilitados en paralelo.
+
+## Proveedores Disponibles
+
+| Proveedor | Estado | Descripción |
+|-----------|--------|-------------|
+| [Discord](./discord) | ✅ Estable | Embeds ricos con colores, campos y enlaces |
+| [Slack](./slack) | ✅ Estable | Mensajes Block Kit via webhooks entrantes |
+| [Telegram](./telegram) | ✅ Estable | Mensajes formateados en HTML via Bot API |
+| [Webhook Genérico](./webhook) | ✅ Estable | Reenvía el payload sin procesar a cualquier URL |
+
+## Cómo Funciona
+
+Cada proveedor se **habilita automáticamente** cuando sus variables de entorno requeridas están configuradas. No necesitas cambios en el código — solo añade las variables de entorno y redespliega.
+
+Habilita tantos proveedores como necesites. Las notificaciones se envían a todos los proveedores habilitados en paralelo.
+
+<Callout type="info">
+  Necesitas al menos un proveedor configurado para que Versend envíe notificaciones.
+</Callout>
+
+## Añadir un Proveedor
+
+1. Elige un proveedor de la lista anterior
+2. Sigue la guía de configuración para obtener las credenciales requeridas
+3. Añade las variables de entorno a tu proyecto de Vercel
+4. Redespliega — ¡eso es todo!
+
