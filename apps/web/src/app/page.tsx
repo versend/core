@@ -1,6 +1,15 @@
+import dynamic from "next/dynamic";
+
 import { Footer } from "@/components/core/footer";
 import { Hero } from "@/components/core/hero";
-import { LightRays } from "@/components/ui/light-rays";
+
+const LightRays = dynamic(
+  () =>
+    import("@/components/ui/light-rays").then((mod) => ({
+      default: mod.LightRays,
+    })),
+  { ssr: false }
+);
 
 export default function Home() {
   return (

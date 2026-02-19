@@ -9,7 +9,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { LLMCopyButton, ViewOptions } from "@/components/page-actions";
 import { getMDXComponents } from "@/lib/mdx-components";
-import { getPageImage, source } from "@/lib/source";
+import { getCachedPage, getPageImage, source } from "@/lib/source";
 
 type PageProps = {
   params: Promise<{ slug?: string[] }>;
@@ -17,7 +17,7 @@ type PageProps = {
 
 export default async function Page(props: PageProps) {
   const params = await props.params;
-  const page = source.getPage(params.slug);
+  const page = getCachedPage(params.slug);
   if (!page) {
     notFound();
   }
@@ -54,7 +54,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata(props: PageProps): Promise<Metadata> {
   const params = await props.params;
-  const page = source.getPage(params.slug);
+  const page = getCachedPage(params.slug);
   if (!page) {
     notFound();
   }

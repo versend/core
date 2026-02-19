@@ -103,7 +103,7 @@ export const LightRays = forwardRef<HTMLDivElement, LightRaysProps>(
     },
     ref
   ) => {
-    const [rays, setRays] = useState<LightRay[]>([]);
+    const [rays, setRays] = useState<LightRay[]>(() => []);
     const cycleDuration = Math.max(speed, 0.1);
 
     useEffect(() => {
