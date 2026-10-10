@@ -1,0 +1,27 @@
+---
+title: Vercel
+description: Deploy your own API project
+icon: Triangle
+---
+
+# Vercel
+
+Deploy the API as one project. This site is already hosted. You do not deploy the docs.
+
+| Setting | Value |
+| --- | --- |
+| Root directory | `apps/api` |
+
+Vercel detects Hono. The entry is `apps/api/src/index.ts`, which exports the app.
+
+Add the variables from [Environment](/docs/setup/environment) to that project.
+
+The webhook URL is your deployment URL plus `/hooks/vercel`.
+
+```text
+https://<your-deployment>.vercel.app/hooks/vercel
+```
+
+<Callout>
+  The rate limit is an in-memory sliding window in the API process. One container has one window. On Vercel each instance has its own window, so a deployment can accept more than `RATE_LIMIT_REQUESTS` while several instances are warm. A replaced instance starts from zero. Set `RATE_LIMIT_REQUESTS=0` to disable it.
+</Callout>

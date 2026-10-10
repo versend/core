@@ -1,0 +1,51 @@
+---
+title: Environment
+description: Variables declared in the Varlock schema
+icon: Settings
+---
+
+# Environment
+
+The API reads `apps/api/.env.schema` through [Varlock](https://varlock.dev). Copy `apps/api/.env.example` to `apps/api/.env` and fill in the values. Names, types, and which values are secret stay in the schema. Secret values stay in `.env` or in the host's environment.
+
+## Required
+
+| Variable | Purpose |
+| --- | --- |
+| `WEBHOOK_INTEGRATION_SECRET` | Signing secret from the Vercel webhook |
+
+The process will not start without the signing secret.
+
+## Destinations
+
+Set any combination. Each one that is present receives every accepted event.
+
+| Variable | Destination |
+| --- | --- |
+| `DISCORD_WEBHOOK_URL` | Discord channel webhook |
+| `DISCORD_WEBHOOK_USERNAME` | Display name. Defaults to `Versend` |
+| `DISCORD_WEBHOOK_AVATAR_URL` | Avatar. Defaults to the Vercel mark |
+| `TELEGRAM_BOT_TOKEN` | Bot token from BotFather |
+| `TELEGRAM_CHAT_ID` | Your user id, or a group or channel id. See [Telegram](/docs/destinations/telegram) |
+| `HTTP_DESTINATION_URL` | Any URL that accepts `POST` JSON |
+
+Telegram is enabled only when both the token and the chat id are set.
+
+## Filters
+
+Leave these empty to accept every event and every deployment target.
+
+| Variable | Behavior |
+| --- | --- |
+| `FILTER_EVENTS` | Allowlist. Example: `deployment.error,deployment.succeeded` |
+| `FILTER_EVENTS_EXCLUDE` | Denylist. Wins over the allowlist |
+| `FILTER_TARGETS` | `production`, `preview`, or both. Applies to `deployment.*` only |
+
+## Rate limit
+
+| Variable | Default |
+| --- | --- |
+| `RATE_LIMIT_REQUESTS` | `60` |
+| `RATE_LIMIT_WINDOW_SECONDS` | `60` |
+
+Set `RATE_LIMIT_REQUESTS=0` to turn the limit off. Counts live in the process that received the request, keyed by the caller IP. One Docker container is one window. On Vercel each instance keeps its own window, and a new instance starts from zero.

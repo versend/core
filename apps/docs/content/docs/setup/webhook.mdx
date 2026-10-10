@@ -1,0 +1,22 @@
+---
+title: Vercel webhook
+description: Send Vercel events to the relay
+icon: Webhook
+---
+
+# Vercel webhook
+
+In the Vercel dashboard, open **Settings → Webhooks** for the account, team, or project you want to watch.
+
+Create a webhook:
+
+- **URL**: your API's public origin, plus `/hooks/vercel`
+- **Events**: the events you want delivered
+
+Copy the signing secret into `WEBHOOK_INTEGRATION_SECRET`.
+
+A team webhook receives every project in that team. A project webhook receives that project only. One Versend process has one signing secret.
+
+Versend answers `401` when the signature does not match, and `200` when the event is accepted or filtered. Delivery runs after the response. A down destination does not make Vercel retry the webhook.
+
+`GET /hooks/vercel` answers `405`. Vercel only sends `POST`.

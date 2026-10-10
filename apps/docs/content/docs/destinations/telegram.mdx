@@ -1,0 +1,61 @@
+---
+title: Telegram
+description: Post a Vercel event into a Telegram chat
+icon: Send
+---
+
+# Telegram
+
+Set both `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID`. The bot can only post into a chat that has started it, or into a group or channel it belongs to.
+
+## Create the bot
+
+1. Message [@BotFather](https://t.me/BotFather) and send `/newbot`.
+2. Copy the token into `TELEGRAM_BOT_TOKEN`.
+
+## Your user id
+
+Use this when Versend should DM you.
+
+1. Open the bot and send `/start`. Telegram drops a DM to a bot that was never started.
+2. Message [@userinfobot](https://t.me/userinfobot). The `Id` in its reply is your user id. That same number is the private chat id.
+3. Put the positive number in `TELEGRAM_CHAT_ID`.
+
+You can read the same id from the Bot API. After `/start`, open this in a browser and replace `<token>`:
+
+```text
+https://api.telegram.org/bot<token>/getUpdates
+```
+
+Find `"chat": { "id": 123456789 }` on your message. That URL contains the bot token. Don't share it.
+
+## A group
+
+1. Add the bot to the group and send a message there.
+2. Open `getUpdates` again. The chat id is negative. A supergroup looks like `-1001234567890`.
+3. Put that id in `TELEGRAM_CHAT_ID`.
+
+If `getUpdates` stays empty, privacy mode is hiding ordinary group messages. Send `/setprivacy` to [@BotFather](https://t.me/BotFather), pick the bot, and turn privacy off. Then send another message in the group.
+
+## A channel
+
+1. Add the bot as an administrator with permission to post.
+2. A public channel accepts `@channelname` as `TELEGRAM_CHAT_ID`.
+3. For the numeric id, forward a channel post to [@userinfobot](https://t.me/userinfobot) and use the forwarded chat id, including the `-100` prefix.
+
+`getUpdates` does not list channel posts.
+
+A deployment reads like this:
+
+```text
+✅ Deployment ready
+
+my-app
+production · main · a1b2c3d
+
+feat: add billing
+
+Open · Inspect
+```
+
+The commit message is quoted. A failure includes the build error. `Open` is the live deployment. `Inspect` is the Vercel inspector.

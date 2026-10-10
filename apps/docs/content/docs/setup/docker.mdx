@@ -1,0 +1,24 @@
+---
+title: Docker
+description: Run the published API image
+icon: Container
+---
+
+# Docker
+
+The API image is `ghcr.io/kwaytv/versend`. A push to `master` publishes `latest` for `linux/amd64` and `linux/arm64`.
+
+In Portainer, add a stack from the web editor and paste the compose from the repository README. Set `WEBHOOK_INTEGRATION_SECRET` and at least one destination as stack environment variables. Portainer substitutes those into the compose file. No env file on the host is required.
+
+The relay listens on port `3000`.
+
+```text
+POST http://localhost:3000/hooks/vercel
+GET  http://localhost:3000/health
+```
+
+`/health` lists the destinations that have credentials. An empty list means events are accepted and then dropped.
+
+Point the Vercel webhook at the public URL of this container, with the path `/hooks/vercel`.
+
+The first GitHub package is private. Make `versend` public on the repository's Packages page, or add `ghcr.io` as a registry in Portainer before deploying the stack.

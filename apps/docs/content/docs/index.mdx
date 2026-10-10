@@ -1,0 +1,28 @@
+---
+title: Introduction
+description: Send Vercel events to Discord, Telegram, or any HTTP endpoint
+icon: House
+---
+
+# Versend
+
+Versend is a webhook relay. Vercel signs an event, Versend checks the signature, and the event is delivered to the destinations you configured.
+
+These docs are hosted for you. You run the relay yourself, as a container or as your own Vercel project.
+
+## What you configure
+
+One secret, and at least one destination:
+
+- `WEBHOOK_INTEGRATION_SECRET` from the Vercel webhook
+- Discord, Telegram, HTTP, or any combination
+
+Rate limiting stays inside the process. There is no Redis and no Slack destination.
+
+## Set it up
+
+<Cards>
+  <Card title="Docker" href="/docs/setup/docker" description="One container, one env file." />
+  <Card title="Vercel" href="/docs/setup/vercel" description="Deploy your own API project." />
+  <Card title="Destinations" href="/docs/destinations" description="Discord, Telegram, and HTTP." />
+</Cards>

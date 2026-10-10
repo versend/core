@@ -1,0 +1,16 @@
+---
+title: HTTP
+description: Forward the Vercel payload to any URL
+icon: Globe
+---
+
+# HTTP
+
+Set `HTTP_DESTINATION_URL` to any endpoint that accepts `POST` with a JSON body. Versend forwards the verified Vercel payload and adds two headers:
+
+| Header | Value |
+| --- | --- |
+| `user-agent` | `Versend/1.0` |
+| `x-versend-event` | The event name, such as `deployment.succeeded` |
+
+Use this for n8n, a worker you own, or anything else that already speaks HTTP. Responses `429` and `5xx` are retried up to three times. Other status codes are not.
