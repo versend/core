@@ -1,52 +1,50 @@
-# versend-recode
+# Versend
 
-This project was created with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack), a modern TypeScript stack that combines Hono, and more.
+Vercel events, delivered to Discord, Telegram, or any HTTP endpoint.
 
-## Features
+`apps/docs` is the hosted guide. `apps/api` is the relay people run themselves.
 
-- **TypeScript** - For type safety and improved developer experience
-- **Hono** - Lightweight, performant server framework
-- **Bun** - Runtime environment
-- **Turborepo** - Optimized monorepo build system
+## Docker
 
-## Getting Started
+Pushes to `master` publish `ghcr.io/kwaytv/versend` (`linux/amd64` and `linux/arm64`). The first package is private. Set it to public under the repository's Packages page, or add `ghcr.io` as a registry in Portainer.
 
-First, install the dependencies:
+In Portainer: **Stacks → Add stack → Web editor**. Paste this, then set `WEBHOOK_INTEGRATION_SECRET` and at least one destination in the stack environment variables.
+
+```yaml
+services:
+  versend:
+    image: ghcr.io/kwaytv/versend:latest
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      WEBHOOK_INTEGRATION_SECRET: ${WEBHOOK_INTEGRATION_SECRET}
+      DISCORD_WEBHOOK_URL: ${DISCORD_WEBHOOK_URL:-}
+      DISCORD_WEBHOOK_USERNAME: ${DISCORD_WEBHOOK_USERNAME:-Versend}
+      DISCORD_WEBHOOK_AVATAR_URL: ${DISCORD_WEBHOOK_AVATAR_URL:-}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
+      HTTP_DESTINATION_URL: ${HTTP_DESTINATION_URL:-}
+      FILTER_EVENTS: ${FILTER_EVENTS:-}
+      FILTER_EVENTS_EXCLUDE: ${FILTER_EVENTS_EXCLUDE:-}
+      FILTER_TARGETS: ${FILTER_TARGETS:-}
+      RATE_LIMIT_REQUESTS: ${RATE_LIMIT_REQUESTS:-60}
+      RATE_LIMIT_WINDOW_SECONDS: ${RATE_LIMIT_WINDOW_SECONDS:-60}
+```
+
+`POST /hooks/vercel` receives the Vercel webhook. `GET /health` lists configured destinations.
+
+## Local
 
 ```bash
 bun install
-```
-
-Then, run the development server:
-
-```bash
 bun run dev
 ```
 
-The API is running at [http://localhost:3000](http://localhost:3000).
+The API reads `apps/api/.env` through Varlock. The schema is `apps/api/.env.schema`.
 
-## Environment Configuration
+## Vercel
 
-Each app owns its environment schema in `.env.schema`. Varlock generates `src/env.ts` during installation; run `bun run env:generate` after changing a schema. Commit schemas, and keep secrets in ignored env files or your deployment platform.
-
-Import the generated `ENV` accessor in application code. Shared database and auth packages receive configuration or initialized clients from the application. See [Varlock's monorepo guide](https://varlock.dev/guides/monorepos/).
-
-Bun's automatic env loading is disabled in `bunfig.toml`; the framework integration or server bootstrap loads Varlock. Node deployments must include Varlock and its dependencies alongside the app schema.
-
-Run standalone Node/Bun tools that use Varlock from the owning app directory so they load that app's schema and env files. `env:generate` only generates TypeScript files; it does not initialize environment values in a subsequent command.
-
-## Project Structure
-
-```
-versend-recode/
-├── apps/
-│   └── server/      # Backend API (Hono)
-├── packages/
-```
-
-## Available Scripts
-
-- `bun run dev`: Start all applications in development mode
-- `bun run build`: Build all applications
-- `bun run dev:server`: Start only the server
-- `bun run check-types`: Check TypeScript types across all apps
+Deploy `apps/api` as one project. Vercel detects the Hono app at `src/index.ts`. The docs site is not part of that deploy.
