@@ -8,7 +8,7 @@ icon: Container
 
 The API image is `ghcr.io/versend/versend`. A push to `master` publishes `latest` for `linux/amd64` and `linux/arm64`. The compose file names the container `versend`.
 
-In Portainer, add a stack from the web editor and paste the compose from the repository README. Set `WEBHOOK_INTEGRATION_SECRET` and at least one destination as stack environment variables. Portainer substitutes those into the compose file. No env file on the host is required.
+In Portainer, add a stack from the web editor and paste the compose from the repository README. Set `WEBHOOK_INTEGRATION_SECRET` and at least one destination on the stack.
 
 The relay listens on port `3000`.
 

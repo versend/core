@@ -10,7 +10,7 @@ const inter = Inter({
 });
 
 export const metadata = {
-  description: "Vercel events delivered to Discord or Telegram.",
+  description: "Vercel events delivered to the destinations you configure.",
   title: "Versend",
 };
 

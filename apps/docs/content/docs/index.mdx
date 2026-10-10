@@ -1,23 +1,19 @@
 ---
 title: Introduction
-description: Send Vercel events to Discord or Telegram
+description: Send Vercel events to the destinations you configure
 icon: House
 ---
 
 # Versend
 
-Versend is a webhook relay. Vercel signs an event, Versend checks the signature, and the event is delivered to the destinations you configured.
+Vercel signs an event. Versend checks it, then posts it to the destinations you set.
 
-These docs are hosted for you. You run the relay as a container.
+You run the relay. These docs are hosted.
 
 ## What you configure
 
-One secret, and at least one destination:
-
-- `WEBHOOK_INTEGRATION_SECRET` from the Vercel webhook
-- Discord, Telegram, or both
-
-Rate limiting stays inside the process. There is no Redis and no Slack destination.
+- `WEBHOOK_INTEGRATION_SECRET`
+- At least one of Discord, Telegram, Slack, ntfy, or Gotify
 
 ## Set it up
 
@@ -30,6 +26,6 @@ Rate limiting stays inside the process. There is no Redis and no Slack destinati
   <Card
     title="Destinations"
     href="/docs/destinations"
-    description="Discord and Telegram."
+    description="Discord, Telegram, Slack, ntfy, and Gotify."
   />
 </Cards>

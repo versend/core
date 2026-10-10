@@ -13,12 +13,12 @@ Create a webhook:
 - **URL**: your API's public origin, plus `/hooks/vercel`
 - **Events**: Deployment Created, Succeeded, Error, Canceled, Promoted, and Rollback
 
-Skip Deployment Cleanup, Build Requested, Blocked, Checkrun, and Attack Detected. Cleanup is noisy, and the others are not accepted. An event name the API does not know gets `400`, so Discord never sees it.
+Skip Deployment Cleanup, Build Requested, Blocked, Checkrun, and Attack Detected. An unknown event name gets `400`.
 
-Copy the secret from the create dialog into `WEBHOOK_INTEGRATION_SECRET`, then recreate the container. The dialog shows that secret once. An integration webhook is different: it is signed with the Integration Console client secret, and that value is the one that belongs in the same variable.
+Copy the secret from the create dialog into `WEBHOOK_INTEGRATION_SECRET`, then recreate the container. The dialog shows it once. An integration webhook uses the Integration Console client secret in that same variable.
 
-A team webhook receives every project in that team. A project webhook receives that project only. One Versend process has one signing secret.
+A team webhook covers every project on the team. A project webhook covers that project. One process, one secret.
 
-Versend answers `401` when the signature does not match, and `200` when the event is accepted or filtered. Delivery runs after the response. A down destination does not make Vercel retry the webhook. Each POST is one container log line, `hooks/vercel`, followed by the status.
+A bad signature is `401`. An accepted or filtered event is `200`. Delivery happens after that response. Each POST logs `hooks/vercel` and the status.
 
-`GET /hooks/vercel` answers `405`. Vercel only sends `POST`. The URL has to answer that POST. A redirect back to the same URL drops the event. A challenge page in front of the origin drops it the same way.
+`GET /hooks/vercel` is `405`. A redirect or a challenge page drops the POST.

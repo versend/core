@@ -1,4 +1,4 @@
 {
   "title": "Destinations",
-  "pages": ["index", "discord", "telegram"]
+  "pages": ["index", "discord", "telegram", "slack", "ntfy", "gotify"]
 }

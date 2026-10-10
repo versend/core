@@ -2,29 +2,44 @@ import Link from "next/link";
 
 const steps = [
   {
-    body: "Vercel signs the raw body. Versend answers 401 when the HMAC does not match the integration secret.",
+    body: "The signature has to match the integration secret.",
     title: "Signature",
   },
   {
-    body: "Events and deployment targets you exclude never leave the process. The rate limit is the container’s own window.",
+    body: "Excluded events and targets are dropped.",
     title: "Filters",
   },
   {
-    body: "Discord and Telegram run together. One destination failing does not cancel the other.",
+    body: "Every configured destination gets the event.",
     title: "Delivery",
   },
 ] as const;
 
 const destinations = [
   {
-    body: "One embed. Project, status, commit, and the live URL when the deployment can be opened.",
+    body: "An embed in a channel.",
     href: "/docs/destinations/discord",
     title: "Discord",
   },
   {
-    body: "An HTML message in a chat, group, or channel, with the same facts as the embed.",
+    body: "A message in a chat.",
     href: "/docs/destinations/telegram",
     title: "Telegram",
+  },
+  {
+    body: "A card in a channel.",
+    href: "/docs/destinations/slack",
+    title: "Slack",
+  },
+  {
+    body: "A notification on a topic.",
+    href: "/docs/destinations/ntfy",
+    title: "ntfy",
+  },
+  {
+    body: "A push to your server.",
+    href: "/docs/destinations/gotify",
+    title: "Gotify",
   },
 ] as const;
 
@@ -70,8 +85,8 @@ const HomePage = () => (
           Vercel events, in the place you already watch.
         </h1>
         <p className="text-fd-muted-foreground mt-4 max-w-lg text-base leading-relaxed">
-          Versend checks the webhook, then posts it to Discord or Telegram. You
-          run the container. These docs stay hosted.
+          Versend checks the webhook, then posts it to Discord, Telegram, Slack,
+          ntfy, or Gotify. You run the container. These docs stay hosted.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
@@ -104,7 +119,7 @@ const HomePage = () => (
 
     <section className="mt-16">
       <h2 className="text-sm font-semibold">Destinations</h2>
-      <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+      <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {destinations.map((destination) => (
           <li key={destination.href}>
             <Link

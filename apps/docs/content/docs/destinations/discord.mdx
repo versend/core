@@ -14,6 +14,4 @@ Set `DISCORD_WEBHOOK_URL` to a channel webhook.
 
 `DISCORD_WEBHOOK_USERNAME` and `DISCORD_WEBHOOK_AVATAR_URL` are optional.
 
-A deployment is one embed. The project name is the author, the title is the status, and the commit message is the description. Environment, branch, and commit sit on one row. The color is the status: green when it is ready, amber while it is building, red when it failed, gray when it was canceled. The title opens the live deployment when there is one, and the Vercel inspector otherwise. A failure adds the build error under the row.
-
-Discord answers `429` often enough that Versend retries that response, then server errors, up to three attempts.
+One embed per event. The project is the author, the title is the status, and the color follows it.
