@@ -22,5 +22,14 @@ export const enabledDestinationNames = (): string[] => {
   if (present(ENV.TELEGRAM_BOT_TOKEN) && present(ENV.TELEGRAM_CHAT_ID)) {
     names.push("telegram");
   }
+  if (present(ENV.SLACK_WEBHOOK_URL)) {
+    names.push("slack");
+  }
+  if (present(ENV.NTFY_URL)) {
+    names.push("ntfy");
+  }
+  if (present(ENV.GOTIFY_URL) && present(ENV.GOTIFY_TOKEN)) {
+    names.push("gotify");
+  }
   return names;
 };

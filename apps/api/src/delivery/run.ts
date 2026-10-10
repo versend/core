@@ -1,5 +1,8 @@
 import { ENV } from "../bootstrap/env";
 import { postDiscord } from "../destinations/discord/post";
+import { postGotify } from "../destinations/gotify/post";
+import { postNtfy } from "../destinations/ntfy/post";
+import { postSlack } from "../destinations/slack/post";
 import { postTelegram } from "../destinations/telegram/post";
 import type { VercelWebhook } from "../vercel-webhooks/payload";
 import { present } from "./enabled";
@@ -19,6 +22,15 @@ export const deliver = async (webhook: VercelWebhook): Promise<void> => {
     jobs.push(
       postTelegram(webhook, ENV.TELEGRAM_BOT_TOKEN, ENV.TELEGRAM_CHAT_ID)
     );
+  }
+  if (present(ENV.SLACK_WEBHOOK_URL)) {
+    jobs.push(postSlack(webhook, ENV.SLACK_WEBHOOK_URL));
+  }
+  if (present(ENV.NTFY_URL)) {
+    jobs.push(postNtfy(webhook, ENV.NTFY_URL, ENV.NTFY_TOKEN));
+  }
+  if (present(ENV.GOTIFY_URL) && present(ENV.GOTIFY_TOKEN)) {
+    jobs.push(postGotify(webhook, ENV.GOTIFY_URL, ENV.GOTIFY_TOKEN));
   }
 
   const results = await Promise.allSettled(jobs);
