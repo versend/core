@@ -10,7 +10,7 @@ const steps = [
     title: "Filters",
   },
   {
-    body: "Discord, Telegram, and HTTP run together. One destination failing does not cancel the others.",
+    body: "Discord and Telegram run together. One destination failing does not cancel the other.",
     title: "Delivery",
   },
 ] as const;
@@ -25,11 +25,6 @@ const destinations = [
     body: "An HTML message in a chat, group, or channel, with the same facts as the embed.",
     href: "/docs/destinations/telegram",
     title: "Telegram",
-  },
-  {
-    body: "The Vercel payload, forwarded as JSON to any endpoint you already have.",
-    href: "/docs/destinations/http",
-    title: "HTTP",
   },
 ] as const;
 
@@ -75,8 +70,8 @@ const HomePage = () => (
           Vercel events, in the place you already watch.
         </h1>
         <p className="text-fd-muted-foreground mt-4 max-w-lg text-base leading-relaxed">
-          Versend checks the webhook, then posts it to Discord, Telegram, or any
-          HTTP endpoint. You run the container. These docs stay hosted.
+          Versend checks the webhook, then posts it to Discord or Telegram. You
+          run the container. These docs stay hosted.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
@@ -109,7 +104,7 @@ const HomePage = () => (
 
     <section className="mt-16">
       <h2 className="text-sm font-semibold">Destinations</h2>
-      <ul className="mt-4 grid gap-3 sm:grid-cols-3">
+      <ul className="mt-4 grid gap-3 sm:grid-cols-2">
         {destinations.map((destination) => (
           <li key={destination.href}>
             <Link

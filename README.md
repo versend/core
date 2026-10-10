@@ -1,6 +1,6 @@
 # Versend
 
-Vercel events, delivered to Discord, Telegram, or any HTTP endpoint.
+Vercel events, delivered to Discord or Telegram.
 
 `apps/docs` is the hosted guide. `apps/api` is the relay people run themselves.
 
@@ -27,7 +27,6 @@ services:
       DISCORD_WEBHOOK_AVATAR_URL: ${DISCORD_WEBHOOK_AVATAR_URL:-}
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
       TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
-      HTTP_DESTINATION_URL: ${HTTP_DESTINATION_URL:-}
       FILTER_EVENTS: ${FILTER_EVENTS:-}
       FILTER_EVENTS_EXCLUDE: ${FILTER_EVENTS_EXCLUDE:-}
       FILTER_TARGETS: ${FILTER_TARGETS:-}

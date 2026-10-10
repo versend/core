@@ -22,8 +22,5 @@ export const enabledDestinationNames = (): string[] => {
   if (present(ENV.TELEGRAM_BOT_TOKEN) && present(ENV.TELEGRAM_CHAT_ID)) {
     names.push("telegram");
   }
-  if (present(ENV.HTTP_DESTINATION_URL)) {
-    names.push("http");
-  }
   return names;
 };

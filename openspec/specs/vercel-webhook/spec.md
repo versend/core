@@ -49,11 +49,11 @@ The API SHALL rate limit by client IP inside the process. It SHALL NOT call an e
 
 ### Requirement: Deliver to configured destinations
 
-The API SHALL deliver an accepted event to each destination that has its credentials set: Discord, Telegram, and HTTP. Slack SHALL NOT be a destination.
+The API SHALL deliver an accepted event to each destination that has its credentials set: Discord and Telegram. Slack SHALL NOT be a destination. A generic HTTP endpoint SHALL NOT be a destination.
 
-#### Scenario: Discord and HTTP are set
+#### Scenario: Discord and Telegram are set
 
-- **WHEN** `DISCORD_WEBHOOK_URL` and `HTTP_DESTINATION_URL` are non-empty
+- **WHEN** `DISCORD_WEBHOOK_URL`, `TELEGRAM_BOT_TOKEN`, and `TELEGRAM_CHAT_ID` are non-empty
 - **THEN** both destinations receive the event, and a failure in one does not cancel the other
 
 #### Scenario: Health

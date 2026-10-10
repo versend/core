@@ -1,6 +1,6 @@
 ---
 title: Introduction
-description: Send Vercel events to Discord, Telegram, or any HTTP endpoint
+description: Send Vercel events to Discord or Telegram
 icon: House
 ---
 
@@ -15,7 +15,7 @@ These docs are hosted for you. You run the relay as a container.
 One secret, and at least one destination:
 
 - `WEBHOOK_INTEGRATION_SECRET` from the Vercel webhook
-- Discord, Telegram, HTTP, or any combination
+- Discord, Telegram, or both
 
 Rate limiting stays inside the process. There is no Redis and no Slack destination.
 
@@ -30,6 +30,6 @@ Rate limiting stays inside the process. There is no Redis and no Slack destinati
   <Card
     title="Destinations"
     href="/docs/destinations"
-    description="Discord, Telegram, and HTTP."
+    description="Discord and Telegram."
   />
 </Cards>
