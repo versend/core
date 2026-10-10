@@ -9,8 +9,13 @@ import { appName, gitConfig } from "./shared";
  */
 export const baseOptions = (): BaseLayoutProps => ({
   githubUrl: `https://github.com/${gitConfig.user}/${gitConfig.repo}`,
+  links: [
+    {
+      text: "Docs",
+      url: "/docs",
+    },
+  ],
   nav: {
-    // JSX supported
     title: appName,
   },
 });
