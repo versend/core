@@ -28,6 +28,11 @@ export const deliver = async (webhook: VercelWebhook): Promise<void> => {
   const results = await Promise.allSettled(jobs);
   const failures = results.filter((result) => result.status === "rejected");
   if (failures.length > 0) {
-    console.error(`delivery failed for ${failures.length} destination(s)`);
+    const reasons = failures.map((result) =>
+      result.reason instanceof Error ? result.reason.message : "unknown"
+    );
+    console.error(
+      `delivery failed for ${failures.length} destination(s): ${reasons.join(", ")}`
+    );
   }
 };
