@@ -1,0 +1,18 @@
+schema: spec-driven
+
+context: |
+  Persistence is spec-anchored. openspec/specs/ is the living contract for current behavior.
+  A change records only the delta. Archive merges that delta back into openspec/specs/.
+  Do not leave shipped behavior defined only inside a change folder.
+
+rules:
+  specs:
+    - Write ADDED, MODIFIED, REMOVED, or RENAMED deltas against the living spec. Do not restate unchanged requirements.
+
+operations:
+  apply:
+    guidance:
+      - If implementation and the living spec disagree, update the spec through the change delta before changing behavior.
+  archive:
+    guidance:
+      - Sync delta specs into openspec/specs/ so the living spec matches what shipped.
