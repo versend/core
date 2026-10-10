@@ -15,34 +15,6 @@ const steps = [
   },
 ] as const;
 
-const destinations = [
-  {
-    body: "An embed in a channel.",
-    href: "/docs/destinations/discord",
-    title: "Discord",
-  },
-  {
-    body: "A message in a chat.",
-    href: "/docs/destinations/telegram",
-    title: "Telegram",
-  },
-  {
-    body: "A card in a channel.",
-    href: "/docs/destinations/slack",
-    title: "Slack",
-  },
-  {
-    body: "A notification on a topic.",
-    href: "/docs/destinations/ntfy",
-    title: "ntfy",
-  },
-  {
-    body: "A push to your server.",
-    href: "/docs/destinations/gotify",
-    title: "Gotify",
-  },
-] as const;
-
 const DeliveryPreview = () => (
   <figure className="border-fd-border bg-fd-card overflow-hidden rounded-lg border shadow-sm">
     <div className="border-fd-success border-l-4 px-4 py-4">
@@ -85,8 +57,7 @@ const HomePage = () => (
           Vercel events, in the place you already watch.
         </h1>
         <p className="text-fd-muted-foreground mt-4 max-w-lg text-base leading-relaxed">
-          Versend checks the webhook, then posts it to Discord, Telegram, Slack,
-          ntfy, or Gotify. You run the container. These docs stay hosted.
+          Versend checks the webhook and posts the event. You run the container.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
@@ -116,25 +87,6 @@ const HomePage = () => (
         </li>
       ))}
     </ol>
-
-    <section className="mt-16">
-      <h2 className="text-sm font-semibold">Destinations</h2>
-      <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {destinations.map((destination) => (
-          <li key={destination.href}>
-            <Link
-              className="border-fd-border hover:bg-fd-accent block h-full rounded-lg border p-4"
-              href={destination.href}
-            >
-              <span className="text-sm font-medium">{destination.title}</span>
-              <span className="text-fd-muted-foreground mt-2 block text-sm leading-relaxed">
-                {destination.body}
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </section>
   </div>
 );
 
