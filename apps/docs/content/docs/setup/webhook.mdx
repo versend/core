@@ -6,14 +6,16 @@ icon: Webhook
 
 # Vercel webhook
 
-In the Vercel dashboard, open **Settings → Webhooks** for the account, team, or project you want to watch.
+Account webhooks are a Pro and Enterprise feature. In the Vercel dashboard, open **Settings → Webhooks** for the team that owns the projects you want to watch.
 
 Create a webhook:
 
 - **URL**: your API's public origin, plus `/hooks/vercel`
-- **Events**: the events you want delivered
+- **Events**: Deployment Created, Succeeded, Error, Canceled, Promoted, and Rollback
 
-Copy the signing secret into `WEBHOOK_INTEGRATION_SECRET`.
+Skip Deployment Cleanup, Build Requested, Blocked, Checkrun, and Attack Detected. Cleanup is noisy, and the others are not accepted. An event name the API does not know gets `400`, so Discord never sees it.
+
+Copy the secret from the create dialog into `WEBHOOK_INTEGRATION_SECRET`, then recreate the container. The dialog shows that secret once. An integration webhook is different: it is signed with the Integration Console client secret, and that value is the one that belongs in the same variable.
 
 A team webhook receives every project in that team. A project webhook receives that project only. One Versend process has one signing secret.
 
