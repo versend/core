@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 
 import { ENV } from "../bootstrap/env";
-import { readWaitUntil, scheduleDelivery } from "../delivery/schedule";
+import { scheduleDelivery } from "../delivery/schedule";
 import { decideRateLimit } from "../rate-limit/decide";
 import { allowEvent } from "./allow-event";
 import { allowTarget } from "./allow-target";
@@ -61,9 +61,6 @@ vercelWebhook.post("/", async (c) => {
     return c.json({ ignored: "target", ok: true });
   }
 
-  scheduleDelivery(
-    readWaitUntil(() => c.executionCtx),
-    parsed.data
-  );
+  scheduleDelivery(parsed.data);
   return c.json({ ok: true });
 });
