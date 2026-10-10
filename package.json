@@ -1,6 +1,7 @@
 {
   "name": "versend-recode",
   "private": true,
+  "type": "module",
   "workspaces": {
     "packages": [
       "apps/*",
@@ -13,27 +14,23 @@
       "varlock": "1.18.0"
     }
   },
-  "type": "module",
   "scripts": {
-    "dev": "turbo run dev",
     "build": "turbo run build",
     "check-types": "turbo run check-types",
-    "dev:server": "turbo run dev -F server --",
-    "env:generate": "bun --bun varlock codegen --path ./apps/server/",
-    "postinstall": "bun --bun varlock codegen --path ./apps/server/",
-    "check": "ultracite check",
-    "fix": "ultracite fix"
+    "dev": "turbo run dev",
+    "dev:api": "turbo run dev -F api --",
+    "dev:docs": "turbo run dev -F docs --",
+    "env:generate": "bun --bun varlock codegen --path ./apps/api/",
+    "postinstall": "bun --bun varlock codegen --path ./apps/api/"
   },
   "dependencies": {
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.12",
     "@types/bun": "catalog:",
     "@versend-recode/config": "workspace:*",
     "turbo": "^2.10.12",
     "typescript": "catalog:",
-    "ultracite": "7.11.0",
     "varlock": "catalog:"
   },
   "packageManager": "bun@1.4.2"
