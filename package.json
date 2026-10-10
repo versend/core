@@ -19,8 +19,8 @@
     "build": "turbo run build",
     "check-types": "turbo run check-types",
     "dev:server": "turbo run dev -F server --",
-    "env:generate": "varlock codegen --path ./apps/server/",
-    "postinstall": "varlock codegen --path ./apps/server/",
+    "env:generate": "bun --bun varlock codegen --path ./apps/server/",
+    "postinstall": "bun --bun varlock codegen --path ./apps/server/",
     "check": "ultracite check",
     "fix": "ultracite fix"
   },
