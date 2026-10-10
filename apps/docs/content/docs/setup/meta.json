@@ -1,4 +1,4 @@
 {
   "title": "Setup",
-  "pages": ["docker", "vercel", "environment", "webhook"]
+  "pages": ["docker", "environment", "webhook"]
 }

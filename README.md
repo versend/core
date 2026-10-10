@@ -43,8 +43,4 @@ bun install
 bun run dev
 ```
 
-The API reads `apps/api/.env` through Varlock. The schema is `apps/api/.env.schema`.
-
-## Vercel
-
-Deploy `apps/api` as one project. Vercel detects the Hono app at `src/index.ts`. The docs site is not part of that deploy.
+The API reads `apps/api/.env` through Varlock. The schema is `apps/api/.env.schema`. The API is a Bun process, from [Hono's Bun guide](https://hono.dev/docs/getting-started/bun). It is not a Vercel project.

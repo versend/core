@@ -48,4 +48,4 @@ Leave these empty to accept every event and every deployment target.
 | `RATE_LIMIT_REQUESTS` | `60` |
 | `RATE_LIMIT_WINDOW_SECONDS` | `60` |
 
-Set `RATE_LIMIT_REQUESTS=0` to turn the limit off. Counts live in the process that received the request, keyed by the caller IP. One Docker container is one window. On Vercel each instance keeps its own window, and a new instance starts from zero.
+Set `RATE_LIMIT_REQUESTS=0` to turn the limit off. Counts live in the process that received the request, keyed by the caller IP. One container is one window.
