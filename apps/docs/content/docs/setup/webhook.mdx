@@ -21,4 +21,4 @@ A team webhook receives every project in that team. A project webhook receives t
 
 Versend answers `401` when the signature does not match, and `200` when the event is accepted or filtered. Delivery runs after the response. A down destination does not make Vercel retry the webhook.
 
-`GET /hooks/vercel` answers `405`. Vercel only sends `POST`. The URL has to answer that POST. A redirect back to the same URL drops the event.
+`GET /hooks/vercel` answers `405`. Vercel only sends `POST`. The URL has to answer that POST. A redirect back to the same URL drops the event. A challenge page in front of the origin drops it the same way.
