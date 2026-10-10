@@ -8,9 +8,9 @@
     ],
     "catalog": {
       "zod": "^4.5.4",
-      "typescript": "^6.0.3",
+      "typescript": "^7.0.2",
       "@types/bun": "^1.4.2",
-      "varlock": "1.18.0"
+      "varlock": "1.22.0"
     }
   },
   "type": "module",
@@ -45,5 +45,5 @@
     "ultracite": "7.12.4",
     "varlock": "catalog:"
   },
-  "packageManager": "bun@1.4.2"
+  "packageManager": "bun@1.4.3"
 }
