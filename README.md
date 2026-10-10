@@ -6,14 +6,15 @@ Vercel events, delivered to Discord, Telegram, or any HTTP endpoint.
 
 ## Docker
 
-Pushes to `master` publish `ghcr.io/kwaytv/versend` (`linux/amd64` and `linux/arm64`). The first package is private. Set it to public under the repository's Packages page, or add `ghcr.io` as a registry in Portainer.
+Pushes to `master` publish `ghcr.io/versend/versend` (`linux/amd64` and `linux/arm64`). The first package is private. Set it to public under the repository's Packages page, or add `ghcr.io` as a registry in Portainer.
 
 In Portainer: **Stacks → Add stack → Web editor**. Paste this, then set `WEBHOOK_INTEGRATION_SECRET` and at least one destination in the stack environment variables.
 
 ```yaml
 services:
   versend:
-    image: ghcr.io/kwaytv/versend:latest
+    image: ghcr.io/versend/versend:latest
+    container_name: versend
     restart: unless-stopped
     ports:
       - "3000:3000"

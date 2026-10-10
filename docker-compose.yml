@@ -1,6 +1,7 @@
 services:
   versend:
-    image: ghcr.io/kwaytv/versend:latest
+    image: ghcr.io/versend/versend:latest
+    container_name: versend
     restart: unless-stopped
     ports:
       - "3000:3000"
