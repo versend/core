@@ -33,37 +33,23 @@ In both branches, never create the root as a side effect: do not run `openspec i
    - Auto-select if only one active change exists
    - If ambiguous, run `openspec list --json` to get available changes and ask the user to select one
 
-   When prompting, show only active changes (not already archived).
-   Include the schema used for each change if available.
+   When prompting, show only active changes (not already archived). Include the schema used for each change if available.
 
    Always announce: "Using change: <name>" and how to override (e.g., `/opsx-archive <other>`).
 
    **Load current archive inputs before the existing archive checks:**
 
    After resolving the selected change and planning root, run:
+
    ```bash
    openspec instructions archive --change "<name>" --json
    ```
-   Keep the same selected-root flags on this command. This lookup is advisory and
-   optional: it only supplies extra prompt inputs, so it must never block archiving.
-   If it exits non-zero or returns invalid JSON — for example on an older CLI that
-   does not support this command yet — continue the archive workflow with no
-   context and no operation guidance. Do not report an error and do not stop.
 
-   A successful response may omit both optional fields. Treat `context` as a
-   required prompt-level input: read and consider it, and apply relevant project
-   facts, conventions, and constraints. Treat `operationGuidance` as optional
-   additive advice: read and consider every entry, and follow entries that are
-   applicable and compatible with the built-in archive workflow.
+   Keep the same selected-root flags on this command. This lookup is advisory and optional: it only supplies extra prompt inputs, so it must never block archiving. If it exits non-zero or returns invalid JSON — for example on an older CLI that does not support this command yet — continue the archive workflow with no context and no operation guidance. Do not report an error and do not stop.
 
-   Keep both fields separate from built-in steps, explicit user choices, resolved
-   paths, CLI checks, and command contracts. If context conflicts with one of those
-   controlling inputs, report the conflict and preserve the controlling value. If
-   guidance is inapplicable or conflicts with a controlling input, do not follow it
-   and explain why. Do not infer replacement paths, skipped prompts, or flags from
-   either field, and do not copy their text verbatim into specs, change artifacts,
-   or archive summaries unless the user separately asks for it. These are
-   prompt-level behavior contracts, not enforceable checks.
+   A successful response may omit both optional fields. Treat `context` as a required prompt-level input: read and consider it, and apply relevant project facts, conventions, and constraints. Treat `operationGuidance` as optional additive advice: read and consider every entry, and follow entries that are applicable and compatible with the built-in archive workflow.
+
+   Keep both fields separate from built-in steps, explicit user choices, resolved paths, CLI checks, and command contracts. If context conflicts with one of those controlling inputs, report the conflict and preserve the controlling value. If guidance is inapplicable or conflicts with a controlling input, do not follow it and explain why. Do not infer replacement paths, skipped prompts, or flags from either field, and do not copy their text verbatim into specs, change artifacts, or archive summaries unless the user separately asks for it. These are prompt-level behavior contracts, not enforceable checks.
 
 2. **Check artifact completion status**
 
@@ -81,20 +67,9 @@ In both branches, never create the root as a side effect: do not run `openspec i
 
 3. **Check task completion status**
 
-   Run `openspec list --json` with the same selected-root flags and find the
-   entry in `changes` whose `name` exactly matches the selected change.
-   Require exactly one match and nonnegative integer `totalTasks` and
-   `completedTasks`, with `completedTasks <= totalTasks`. The CLI resolves
-   the schema's tracked task files, including custom artifact names, output
-   paths, and globs.
-   Incomplete tasks = `totalTasks - completedTasks`.
+   Run `openspec list --json` with the same selected-root flags and find the entry in `changes` whose `name` exactly matches the selected change. Require exactly one match and nonnegative integer `totalTasks` and `completedTasks`, with `completedTasks <= totalTasks`. The CLI resolves the schema's tracked task files, including custom artifact names, output paths, and globs. Incomplete tasks = `totalTasks - completedTasks`.
 
-   Do not infer task completion from artifact status or the absence of a
-   top-level `tasks.md`. If the lookup fails, returns invalid JSON, omits or
-   duplicates the selected change, or returns invalid counts, report the problem
-   and stop before syncing or archiving.
-   The CLI counts only `x`/`X` checkbox markers as complete;
-   other markers, including unfamiliar ones, remain incomplete.
+   Do not infer task completion from artifact status or the absence of a top-level `tasks.md`. If the lookup fails, returns invalid JSON, omits or duplicates the selected change, or returns invalid counts, report the problem and stop before syncing or archiving. The CLI counts only `x`/`X` checkbox markers as complete; other markers, including unfamiliar ones, remain incomplete.
 
    **If incomplete tasks found:**
    - Display warning showing count of incomplete tasks
@@ -105,14 +80,11 @@ In both branches, never create the root as a side effect: do not run `openspec i
 
 4. **Assess delta spec sync state**
 
-   Use `artifactPaths.specs.existingOutputPaths` from status JSON as the only
-   delta-spec source. If the `specs` entry is missing or
-   `existingOutputPaths` is empty, proceed without a sync prompt and do not infer
-   delta specs from other artifacts.
+   Use `artifactPaths.specs.existingOutputPaths` from status JSON as the only delta-spec source. If the `specs` entry is missing or `existingOutputPaths` is empty, proceed without a sync prompt and do not infer delta specs from other artifacts.
 
    **If delta specs exist:**
    - Compare each delta spec with its corresponding main spec at `<planningHome.root>/openspec/specs/<capability-path>/spec.md` (use the store-aware `planningHome.root` from step 2, not a hardcoded repo path)
-   - A missing main spec is **not automatically** "already synced". For a new capability, the main spec is an *output* of the sync, not an input:
+   - A missing main spec is **not automatically** "already synced". For a new capability, the main spec is an _output_ of the sync, not an input:
      - If the delta has MODIFIED or RENAMED requirements, report that only ADDED requirements can create a new main spec and mark that capability as sync-blocked. Never invent a requirement that has no current version.
      - Otherwise, if the delta has only REMOVED requirements and the change's `.openspec.yaml` declares `retire_capabilities: true`, the capability is already retired: count it as already synced, warn that there is nothing left to remove, and do not recreate the main spec. Apply this rule both now and when verifying a completed sync.
      - Otherwise, if the delta has no ADDED requirements, report that no sync is possible and mark that capability as sync-blocked. For a REMOVED-only delta, warn that there is no main spec to remove from and leave the main-spec tree unchanged. `openspec archive` refuses the unmarked REMOVED-only case with `Spec must have at least one requirement`.
@@ -131,20 +103,11 @@ In both branches, never create the root as a side effect: do not run `openspec i
    - "Sync now" or "Sync anyway" — sync, then verify (below). Do not start any sync while a capability is sync-blocked; explain the blocker and repeat the available choices.
    - Anything else — ask again rather than archiving
 
-   Before a selected sync writes any main spec, run
-   `openspec instructions specs --change "<name>" --json` once with the same
-   selected-root flags. Require a zero exit status and valid artifact-instruction
-   JSON. If the lookup fails or returns invalid JSON, report the error and stop
-   before writing any main spec or moving the change. A valid response with omitted
-   `rules` is the no-rules case. Apply returned `rules` only to the content and
-   form of main specs produced by this merge; do not use them as archive guidance,
-   change CLI behavior, or copy the rule text into any output file.
+   Before a selected sync writes any main spec, run `openspec instructions specs --change "<name>" --json` once with the same selected-root flags. Require a zero exit status and valid artifact-instruction JSON. If the lookup fails or returns invalid JSON, report the error and stop before writing any main spec or moving the change. A valid response with omitted `rules` is the no-rules case. Apply returned `rules` only to the content and form of main specs produced by this merge; do not use them as archive guidance, change CLI behavior, or copy the rule text into any output file.
 
    Then run the `/opsx-sync` workflow inline (agent-driven intelligent merge) for change '<name>', passing the delta spec analysis and the fetched specs-rule snapshot from above, and wait for it to finish. The inline sync must reuse that snapshot without fetching `specs` instructions again. Do not delegate it to a background task — step 5 would move `changeRoot` out from under a sync that is still reading it, leaving the change archived and the main specs never updated. If your agent can only run it by delegation, delegate synchronously and wait for the result.
 
-   If the sync reports any stop or blocking condition, treat the sync as failed.
-   Stop the archive immediately. Do not perform the post-sync content comparison and do not move its `changeRoot`.
-   Nothing has moved, so the user can fix the blocking condition or re-run the sync.
+   If the sync reports any stop or blocking condition, treat the sync as failed. Stop the archive immediately. Do not perform the post-sync content comparison and do not move its `changeRoot`. Nothing has moved, so the user can fix the blocking condition or re-run the sync.
 
    After the sync writes each main spec, verify its structure against the canonical sync contract:
    - A new main spec starts with a `# <capability> Specification` title. An existing main spec keeps its title exactly as it is.
@@ -164,6 +127,7 @@ In both branches, never create the root as a side effect: do not run `openspec i
 5. **Perform the archive**
 
    Create an `archive` directory under `planningHome.changesDir` if it doesn't exist:
+
    ```bash
    mkdir -p "<planningHome.changesDir>/archive"
    ```
@@ -192,10 +156,7 @@ In both branches, never create the root as a side effect: do not run `openspec i
 ```markdown
 ## Archive Complete
 
-**Change:** <change-name>
-**Schema:** <schema-name>
-**Archived to:** the archive path derived from `planningHome.changesDir`/<target-name>/
-**Specs:** ✓ Synced to main specs
+**Change:** <change-name> **Schema:** <schema-name> **Archived to:** the archive path derived from `planningHome.changesDir`/<target-name>/ **Specs:** ✓ Synced to main specs
 
 All artifacts complete. All tasks complete.
 ```
@@ -205,10 +166,7 @@ All artifacts complete. All tasks complete.
 ```markdown
 ## Archive Complete
 
-**Change:** <change-name>
-**Schema:** <schema-name>
-**Archived to:** the archive path derived from `planningHome.changesDir`/<target-name>/
-**Specs:** No delta specs
+**Change:** <change-name> **Schema:** <schema-name> **Archived to:** the archive path derived from `planningHome.changesDir`/<target-name>/ **Specs:** No delta specs
 
 All artifacts complete. All tasks complete.
 ```
@@ -218,12 +176,10 @@ All artifacts complete. All tasks complete.
 ```markdown
 ## Archive Complete (with warnings)
 
-**Change:** <change-name>
-**Schema:** <schema-name>
-**Archived to:** the archive path derived from `planningHome.changesDir`/<target-name>/
-**Specs:** Sync skipped (user chose to skip)
+**Change:** <change-name> **Schema:** <schema-name> **Archived to:** the archive path derived from `planningHome.changesDir`/<target-name>/ **Specs:** Sync skipped (user chose to skip)
 
 **Warnings:**
+
 - Archived with 2 incomplete artifacts
 - Archived with 3 incomplete tasks
 - Delta spec sync was skipped (user chose to skip)
@@ -236,18 +192,19 @@ Review the archive if this was not intentional.
 ```markdown
 ## Archive Failed
 
-**Change:** <change-name>
-**Target:** the archive path derived from `planningHome.changesDir`/<target-name>/
+**Change:** <change-name> **Target:** the archive path derived from `planningHome.changesDir`/<target-name>/
 
 Target archive directory already exists.
 
 **Options:**
+
 1. Rename the existing archive
 2. Delete the existing archive if it's a duplicate
 3. Wait until a different date to archive
 ```
 
 **Guardrails**
+
 - Announce the selected change; prompt for selection when it is ambiguous
 - Use artifact graph (openspec status --json) for completion checking
 - Don't block archive on warnings - just inform and confirm

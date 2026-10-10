@@ -43,7 +43,7 @@ vercelWebhook.post("/", async (c) => {
 
   let body: unknown;
   try {
-    body = JSON.parse(rawBody) as unknown;
+    body = JSON.parse(rawBody);
   } catch {
     return c.json({ error: "invalid_json", ok: false }, 400);
   }

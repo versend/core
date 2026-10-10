@@ -2,6 +2,9 @@ import { docsLlms } from "@/lib/source";
 
 export const revalidate = false;
 
-export async function GET() {
-  return new Response(await docsLlms.full());
-}
+/**
+ * Serves the generated document.
+ *
+ * @returns The result.
+ */
+export const GET = async () => new Response(await docsLlms.full());

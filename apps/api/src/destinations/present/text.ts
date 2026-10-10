@@ -1,15 +1,28 @@
-const httpScheme = /^https?:\/\//i;
+const httpScheme = /^https?:\/\//iu;
 
-export function clip(value: string, max: number): string {
+/**
+ * Trims a string to a maximum length.
+ *
+ * @param value - Candidate string.
+ * @param max - Maximum length.
+ * @returns The result.
+ */
+export const clip = (value: string, max: number): string => {
   const trimmed = value.trim();
   if (trimmed.length <= max) {
     return trimmed;
   }
 
   return `${trimmed.slice(0, Math.max(0, max - 1))}…`;
-}
+};
 
-export function absoluteHttp(value: string | undefined): string | undefined {
+/**
+ * Normalizes a hostname or URL to http(s).
+ *
+ * @param value - Candidate string.
+ * @returns The result.
+ */
+export const absoluteHttp = (value: string | undefined): string | undefined => {
   if (!value) {
     return undefined;
   }
@@ -28,12 +41,20 @@ export function absoluteHttp(value: string | undefined): string | undefined {
     // A deployment hostname or project link that is not a URL is omitted.
     return undefined;
   }
-}
+};
 
-export function splitMessage(message: string): {
+interface CommitMessage {
   subject: string;
   body?: string;
-} {
+}
+
+/**
+ * Splits a commit message into a subject and body.
+ *
+ * @param message - Commit message.
+ * @returns The result.
+ */
+export const splitMessage = (message: string): CommitMessage => {
   const normalized = message.replaceAll("\r\n", "\n").trim();
   const breakAt = normalized.indexOf("\n");
   const subject = clip(
@@ -49,4 +70,4 @@ export function splitMessage(message: string): {
     body: rest.length > 0 ? clip(rest, 700) : undefined,
     subject,
   };
-}
+};

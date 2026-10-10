@@ -7,6 +7,11 @@ const searchHighlight = String.raw`
 }
 `;
 
-export function SearchHighlight() {
-  return <style href="fd-search-highlight">{searchHighlight}</style>;
-}
+/**
+ * Injects the find-highlight rules outside the Tailwind parser.
+ *
+ * @returns The highlight element.
+ */
+export const SearchHighlight = () => (
+  <style href="fd-search-highlight">{searchHighlight}</style>
+);

@@ -5,25 +5,38 @@ import { source } from "@/lib/source";
 
 export const revalidate = false;
 
-export async function GET(
+/**
+ * Serves the generated document.
+ *
+ * @param _req - Incoming request.
+ * @param params - Route params.
+ * @returns The result.
+ */
+export const GET = async (
   _req: Request,
-  { params }: RouteContext<"/og/docs/[...slug]">,
-) {
+  { params }: RouteContext<"/og/docs/[...slug]">
+) => {
   const { slug } = await params;
   const page = source.getPage(slug.slice(0, -1));
-  if (!page) notFound();
+  if (!page) {
+    notFound();
+  }
 
   return generateOGImage({
-    title: page.data.title,
     description: page.data.description,
-    site: "My App",
     format: "webp",
+    site: "My App",
+    title: page.data.title,
   });
-}
+};
 
-export function generateStaticParams() {
-  return source.generateParams().map((item) => ({
+/**
+ * Lists the static paths for this route.
+ *
+ * @returns The result.
+ */
+export const generateStaticParams = () =>
+  source.generateParams().map((item) => ({
     ...item,
     slug: [...item.slug, "image.webp"],
   }));
-}

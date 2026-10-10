@@ -4,10 +4,16 @@ import type { VercelWebhook } from "../../vercel-webhooks/payload";
 import { discordAuthor } from "./appearance";
 import { discordEmbed } from "./embed";
 
-export async function postDiscord(
+/**
+ * Sends the webhook to a Discord webhook URL.
+ *
+ * @param webhook - Verified Vercel webhook.
+ * @param url - Destination URL.
+ */
+export const postDiscord = async (
   webhook: VercelWebhook,
   url: string
-): Promise<void> {
+): Promise<void> => {
   const username = ENV.DISCORD_WEBHOOK_USERNAME?.trim() || "Versend";
   const avatar =
     ENV.DISCORD_WEBHOOK_AVATAR_URL?.trim() || discordAuthor.iconUrl;
@@ -23,4 +29,4 @@ export async function postDiscord(
       method: "POST",
     })
   );
-}
+};

@@ -2,6 +2,7 @@ import { RootProvider } from "fumadocs-ui/provider/next";
 
 import "./global.css";
 import { Inter } from "next/font/google";
+
 import { SearchHighlight } from "./search-highlight";
 
 const inter = Inter({
@@ -9,18 +10,18 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "Versend",
   description:
     "Vercel events delivered to Discord, Telegram, or any HTTP endpoint.",
+  title: "Versend",
 };
 
-export default function Layout({ children }: LayoutProps<"/">) {
-  return (
-    <html lang="en" className={inter.className} suppressHydrationWarning>
-      <body className="flex flex-col min-h-screen">
-        <SearchHighlight />
-        <RootProvider>{children}</RootProvider>
-      </body>
-    </html>
-  );
-}
+const Layout = ({ children }: LayoutProps<"/">) => (
+  <html lang="en" className={inter.className} suppressHydrationWarning>
+    <body className="flex min-h-screen flex-col">
+      <SearchHighlight />
+      <RootProvider>{children}</RootProvider>
+    </body>
+  </html>
+);
+
+export default Layout;

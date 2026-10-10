@@ -14,12 +14,14 @@ import { getMDXComponents } from "@/components/mdx";
 import { getPageImageUrl, getPageMarkdownUrl, gitConfig } from "@/lib/shared";
 import { source } from "@/lib/source";
 
-export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
+const Page = async (props: PageProps<"/docs/[[...slug]]">) => {
   const params = await props.params;
   const page = source.getPage(params.slug);
-  if (!page) notFound();
+  if (!page) {
+    notFound();
+  }
 
-  const MDX = page.data.body;
+  const PageBody = page.data.body;
   const markdownUrl = getPageMarkdownUrl(page).url;
 
   return (
@@ -28,7 +30,7 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
       <DocsDescription className="mb-0">
         {page.data.description}
       </DocsDescription>
-      <div className="flex flex-row gap-2 items-center border-b pb-6">
+      <div className="flex flex-row items-center gap-2 border-b pb-6">
         <MarkdownCopyButton markdownUrl={markdownUrl} />
         <ViewOptionsPopover
           markdownUrl={markdownUrl}
@@ -36,7 +38,7 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
         />
       </div>
       <DocsBody>
-        <MDX
+        <PageBody
           components={getMDXComponents({
             // this allows you to link to other pages with relative file paths
             a: createRelativeLink(source, page),
@@ -45,24 +47,37 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
       </DocsBody>
     </DocsPage>
   );
-}
+};
 
-export async function generateStaticParams() {
-  return source.generateParams();
-}
+export default Page;
 
-export async function generateMetadata(
-  props: PageProps<"/docs/[[...slug]]">,
-): Promise<Metadata> {
+/**
+ * Lists the static paths for this route.
+ *
+ * @returns The result.
+ */
+export const generateStaticParams = () => source.generateParams();
+
+/**
+ * Builds the page title and social image.
+ *
+ * @param props - Page props.
+ * @returns The result.
+ */
+export const generateMetadata = async (
+  props: PageProps<"/docs/[[...slug]]">
+): Promise<Metadata> => {
   const params = await props.params;
   const page = source.getPage(params.slug);
-  if (!page) notFound();
+  if (!page) {
+    notFound();
+  }
 
   return {
-    title: page.data.title,
     description: page.data.description,
     openGraph: {
       images: getPageImageUrl(page).url,
     },
+    title: page.data.title,
   };
-}
+};

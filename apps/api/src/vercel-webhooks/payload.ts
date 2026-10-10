@@ -49,12 +49,28 @@ export const webhookSchema = z
   })
   .loose();
 
+/**
+ * Parsed Vercel webhook.
+ */
 export type VercelWebhook = z.infer<typeof webhookSchema>;
+/**
+ * Deployment meta carried on a webhook.
+ */
+export type WebhookMeta = z.infer<typeof metaSchema>;
 
-export function metaText(
-  meta: Record<string, unknown> | undefined,
+const metaString = z.string().min(1);
+
+/**
+ * Reads a non-empty string field from deployment meta.
+ *
+ * @param meta - Deployment meta.
+ * @param key - Meta field name.
+ * @returns The result.
+ */
+export const metaText = (
+  meta: WebhookMeta | undefined,
   key: string
-): string | undefined {
-  const value = meta?.[key];
-  return typeof value === "string" && value.length > 0 ? value : undefined;
-}
+): string | undefined => {
+  const parsed = metaString.safeParse(meta?.[key]);
+  return parsed.success ? parsed.data : undefined;
+};

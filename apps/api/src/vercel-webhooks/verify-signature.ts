@@ -1,10 +1,18 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 
-export function verifySignature(
+/**
+ * Checks the Vercel HMAC-SHA1 signature.
+ *
+ * @param rawBody - Raw webhook body.
+ * @param signature - x-vercel-signature header.
+ * @param secret - Integration secret.
+ * @returns The result.
+ */
+export const verifySignature = (
   rawBody: string,
   signature: string | null,
   secret: string
-): boolean {
+): boolean => {
   if (!signature) {
     return false;
   }
@@ -17,4 +25,4 @@ export function verifySignature(
   }
 
   return timingSafeEqual(left, right);
-}
+};

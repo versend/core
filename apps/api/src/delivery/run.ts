@@ -5,7 +5,12 @@ import { postTelegram } from "../destinations/telegram/post";
 import type { VercelWebhook } from "../vercel-webhooks/payload";
 import { present } from "./enabled";
 
-export async function deliver(webhook: VercelWebhook): Promise<void> {
+/**
+ * Posts the webhook to every configured destination.
+ *
+ * @param webhook - Verified Vercel webhook.
+ */
+export const deliver = async (webhook: VercelWebhook): Promise<void> => {
   const jobs: Promise<void>[] = [];
 
   if (present(ENV.DISCORD_WEBHOOK_URL)) {
@@ -25,4 +30,4 @@ export async function deliver(webhook: VercelWebhook): Promise<void> {
   if (failures.length > 0) {
     console.error(`delivery failed for ${failures.length} destination(s)`);
   }
-}
+};

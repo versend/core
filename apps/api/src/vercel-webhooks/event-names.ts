@@ -80,4 +80,7 @@ export const vercelEventNames = [
   "project.rolling-release.started",
 ] as const;
 
+/**
+ * Event name accepted by the webhook parser.
+ */
 export type VercelEventName = (typeof vercelEventNames)[number];

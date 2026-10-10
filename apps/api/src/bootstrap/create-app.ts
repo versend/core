@@ -3,7 +3,12 @@ import { Hono } from "hono";
 import { health } from "../health/route";
 import { vercelWebhook } from "../vercel-webhooks/route";
 
-export function createApp(): Hono {
+/**
+ * Builds the Hono app.
+ *
+ * @returns The result.
+ */
+export const createApp = (): Hono => {
   const app = new Hono();
 
   app.route("/health", health);
@@ -11,4 +16,4 @@ export function createApp(): Hono {
   app.notFound((c) => c.json({ error: "not_found", ok: false }, 404));
 
   return app;
-}
+};

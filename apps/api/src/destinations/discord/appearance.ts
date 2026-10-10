@@ -15,6 +15,10 @@ export const discordAuthor = {
   url: "https://versend.io",
 };
 
-export function toneColor(tone: DeliveryTone): number {
-  return colorByTone[tone];
-}
+/**
+ * Discord embed color for a tone.
+ *
+ * @param tone - Delivery tone.
+ * @returns The result.
+ */
+export const toneColor = (tone: DeliveryTone): number => colorByTone[tone];

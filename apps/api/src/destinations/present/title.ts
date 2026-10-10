@@ -1,6 +1,6 @@
 import type { VercelEventName } from "../../vercel-webhooks/event-names";
 
-const wordBreak = /[.-]/;
+const wordBreak = /[.-]/u;
 
 const titles: Partial<Record<VercelEventName, string>> = {
   "alerts.triggered": "Alert triggered",
@@ -75,17 +75,21 @@ const titles: Partial<Record<VercelEventName, string>> = {
   "project.rolling-release.started": "Rolling release started",
 };
 
-export function deliveryTitle(type: VercelEventName): string {
-  return titles[type] ?? sentence(type);
-}
+const capitalize = (word: string): string =>
+  word.charAt(0).toUpperCase() + word.slice(1);
 
-function sentence(type: string): string {
+const sentence = (type: string): string => {
   const words = type.split(wordBreak);
   return words
     .map((word, index) => (index === 0 ? capitalize(word) : word))
     .join(" ");
-}
+};
 
-function capitalize(word: string): string {
-  return word.charAt(0).toUpperCase() + word.slice(1);
-}
+/**
+ * Human title for a Vercel event.
+ *
+ * @param type - Vercel event name.
+ * @returns The result.
+ */
+export const deliveryTitle = (type: VercelEventName): string =>
+  titles[type] ?? sentence(type);

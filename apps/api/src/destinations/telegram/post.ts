@@ -2,11 +2,18 @@ import { sendWithRetry } from "../../delivery/retry";
 import type { VercelWebhook } from "../../vercel-webhooks/payload";
 import { telegramMessage } from "./message";
 
-export async function postTelegram(
+/**
+ * Sends the webhook to a Telegram chat.
+ *
+ * @param webhook - Verified Vercel webhook.
+ * @param token - Telegram bot token.
+ * @param chatId - Telegram chat id.
+ */
+export const postTelegram = async (
   webhook: VercelWebhook,
   token: string,
   chatId: string
-): Promise<void> {
+): Promise<void> => {
   const response = await sendWithRetry(() =>
     fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       body: JSON.stringify({
@@ -20,6 +27,7 @@ export async function postTelegram(
     })
   );
 
+  // SAFETY: sendMessage returns JSON. Only ok and description are read.
   const data = (await response.json()) as {
     ok?: boolean;
     description?: string;
@@ -27,4 +35,4 @@ export async function postTelegram(
   if (data.ok === false) {
     throw new Error(data.description ?? "telegram rejected the message");
   }
-}
+};

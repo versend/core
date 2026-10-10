@@ -1,7 +1,26 @@
 import { ENV } from "../bootstrap/env";
-import { metaText, type VercelWebhook } from "./payload";
+import { metaText } from "./payload";
+import type { VercelWebhook } from "./payload";
 
-export function allowTarget(webhook: VercelWebhook): boolean {
+const list = (value: string | undefined): Set<string> | null => {
+  const names = value
+    ?.split(",")
+    .map((name) => name.trim().toLowerCase())
+    .filter((name) => name.length > 0);
+  if (!names || names.length === 0) {
+    return null;
+  }
+
+  return new Set(names);
+};
+
+/**
+ * Keeps the deployment unless its target is filtered.
+ *
+ * @param webhook - Verified Vercel webhook.
+ * @returns The result.
+ */
+export const allowTarget = (webhook: VercelWebhook): boolean => {
   const allowed = list(ENV.FILTER_TARGETS);
   if (!(allowed && webhook.type.startsWith("deployment."))) {
     return true;
@@ -13,16 +32,4 @@ export function allowTarget(webhook: VercelWebhook): boolean {
     "preview";
 
   return allowed.has(target.toLowerCase());
-}
-
-function list(value: string | undefined): Set<string> | null {
-  const names = value
-    ?.split(",")
-    .map((name) => name.trim().toLowerCase())
-    .filter((name) => name.length > 0);
-  if (!names || names.length === 0) {
-    return null;
-  }
-
-  return new Set(names);
-}
+};

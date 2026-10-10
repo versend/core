@@ -1,6 +1,20 @@
 import { ENV } from "../bootstrap/env";
 
-export function enabledDestinationNames(): string[] {
+/**
+ * Treats a blank string as unset.
+ *
+ * @param value - Candidate string.
+ * @returns The result.
+ */
+export const present = (value: string | undefined): value is string =>
+  typeof value === "string" && value.trim().length > 0;
+
+/**
+ * Lists destinations that have credentials configured.
+ *
+ * @returns The result.
+ */
+export const enabledDestinationNames = (): string[] => {
   const names: string[] = [];
   if (present(ENV.DISCORD_WEBHOOK_URL)) {
     names.push("discord");
@@ -12,8 +26,4 @@ export function enabledDestinationNames(): string[] {
     names.push("http");
   }
   return names;
-}
-
-export function present(value: string | undefined): value is string {
-  return typeof value === "string" && value.trim().length > 0;
-}
+};

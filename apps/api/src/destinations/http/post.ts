@@ -1,10 +1,16 @@
 import { sendWithRetry } from "../../delivery/retry";
 import type { VercelWebhook } from "../../vercel-webhooks/payload";
 
-export async function postHttp(
+/**
+ * POSTs the webhook JSON to an HTTP destination.
+ *
+ * @param webhook - Verified Vercel webhook.
+ * @param url - Destination URL.
+ */
+export const postHttp = async (
   webhook: VercelWebhook,
   url: string
-): Promise<void> {
+): Promise<void> => {
   await sendWithRetry(() =>
     fetch(url, {
       body: JSON.stringify(webhook),
@@ -16,4 +22,4 @@ export async function postHttp(
       method: "POST",
     })
   );
-}
+};

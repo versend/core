@@ -1,12 +1,17 @@
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import type { MDXComponents } from "mdx/types";
 
-export function getMDXComponents(components?: MDXComponents) {
-  return {
+/**
+ * Merges Fumadocs MDX components with local overrides.
+ *
+ * @param components - MDX component overrides.
+ * @returns The result.
+ */
+export const getMDXComponents = (components?: MDXComponents) =>
+  ({
     ...defaultMdxComponents,
     ...components,
-  } satisfies MDXComponents;
-}
+  }) satisfies MDXComponents;
 
 export const useMDXComponents = getMDXComponents;
 

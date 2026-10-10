@@ -1,13 +1,11 @@
-function dropHighlightPseudo() {
-  return {
-    postcssPlugin: "drop-highlight-pseudo",
-    Rule(rule) {
-      if (rule.selector.includes("::highlight(")) {
-        rule.remove();
-      }
-    },
-  };
-}
+const dropHighlightPseudo = () => ({
+  Rule(rule) {
+    if (rule.selector.includes("::highlight(")) {
+      rule.remove();
+    }
+  },
+  postcssPlugin: "drop-highlight-pseudo",
+});
 
 dropHighlightPseudo.postcss = true;
 

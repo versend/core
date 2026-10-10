@@ -1,7 +1,6 @@
 import "./bootstrap/load-env";
-
-import { ENV } from "./bootstrap/env";
 import { createApp } from "./bootstrap/create-app";
+import { ENV } from "./bootstrap/env";
 
 const app = createApp();
 
