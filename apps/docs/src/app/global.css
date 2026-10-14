@@ -2,6 +2,72 @@
 @import "fumadocs-ui/css/neutral.css";
 @import "fumadocs-ui/css/preset.css";
 
+@theme inline {
+  --font-sans: var(--font-sans-family), ui-sans-serif, system-ui, sans-serif;
+  --font-mono:
+    var(--font-mono-family), ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
+/*
+ * Palette. Every `fd-*` colour used in components is declared here so the
+ * theme is explicit (and lintable) rather than inherited from the preset.
+ */
+@theme {
+  --color-fd-background: hsl(40, 10%, 98%);
+  --color-fd-foreground: hsl(30, 4%, 8%);
+  --color-fd-card: hsl(40, 8%, 96.5%);
+  --color-fd-card-foreground: hsl(30, 4%, 8%);
+  --color-fd-popover: hsl(40, 10%, 99%);
+  --color-fd-popover-foreground: hsl(30, 4%, 12%);
+  --color-fd-muted: hsl(40, 8%, 95%);
+  --color-fd-muted-foreground: hsl(30, 3%, 44%);
+  --color-fd-primary: hsl(30, 4%, 10%);
+  --color-fd-primary-foreground: hsl(40, 10%, 98%);
+  --color-fd-secondary: hsl(40, 8%, 94%);
+  --color-fd-secondary-foreground: hsl(30, 4%, 10%);
+  --color-fd-accent: hsla(40, 6%, 84%, 55%);
+  --color-fd-accent-foreground: hsl(30, 4%, 10%);
+  --color-fd-border: hsla(30, 6%, 70%, 45%);
+  --color-fd-ring: hsl(30, 4%, 60%);
+  --color-fd-overlay: hsla(0, 0%, 0%, 0.25);
+  --color-fd-rail: hsl(30, 3%, 18%);
+  --color-fd-success: oklch(72.3% 0.219 149.579);
+
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1rem;
+  --text-sm: 0.8125rem;
+  --text-sm--line-height: 1.25rem;
+  --text-md: 0.875rem;
+  --text-md--line-height: 1.375rem;
+  --text-base: 0.9375rem;
+  --text-base--line-height: 1.6rem;
+  --text-3xl: 1.875rem;
+  --text-3xl--line-height: 2.25rem;
+}
+
+.dark {
+  --color-fd-background: hsl(240, 6%, 6.5%);
+  --color-fd-foreground: hsl(40, 10%, 92%);
+  --color-fd-card: hsl(240, 5%, 9%);
+  --color-fd-card-foreground: hsl(40, 10%, 92%);
+  --color-fd-popover: hsl(240, 5%, 10.5%);
+  --color-fd-popover-foreground: hsl(40, 10%, 88%);
+  --color-fd-muted: hsl(240, 5%, 12%);
+  --color-fd-muted-foreground: hsla(40, 6%, 72%, 0.78);
+  --color-fd-primary: hsl(40, 10%, 95%);
+  --color-fd-primary-foreground: hsl(240, 6%, 8%);
+  --color-fd-secondary: hsl(240, 5%, 12%);
+  --color-fd-secondary-foreground: hsl(40, 10%, 92%);
+  --color-fd-accent: hsla(240, 5%, 40%, 30%);
+  --color-fd-accent-foreground: hsl(40, 10%, 94%);
+  --color-fd-border: hsla(240, 5%, 45%, 22%);
+  --color-fd-ring: hsl(240, 4%, 55%);
+  --color-fd-overlay: hsla(0, 0%, 0%, 0.5);
+  --color-fd-rail: hsl(40, 10%, 92%);
+}
+
 html {
   scrollbar-gutter: stable;
 }
@@ -9,4 +75,157 @@ html {
 html > body[data-scroll-locked] {
   margin-right: 0px !important;
   --removed-body-scroll-bar-size: 0px !important;
+}
+
+body {
+  font-feature-settings:
+    "cv11" 1,
+    "ss01" 1;
+  text-rendering: optimizeLegibility;
+}
+
+.font-mono,
+code,
+kbd,
+pre {
+  font-variant-ligatures: none;
+}
+
+/*
+ * Docs shell layout.
+ *
+ * Column widths are driven by CSS variables so the sidebar can collapse with a
+ * grid-column transition (`--fd-sidebar-col` is a registered @property in the
+ * Fumadocs preset). Layout state is expressed through data attributes rather
+ * than inline styles.
+ */
+#nd-docs-layout {
+  --docs-layout-width: 92rem;
+  --docs-sidebar-width: 15.5rem;
+  --docs-toc-width: 0px;
+  --docs-header-height: 0px;
+  --fd-sidebar-col: 0px;
+
+  display: grid;
+  grid-template-areas: "sidebar main toc";
+  grid-template-columns:
+    var(--fd-sidebar-col)
+    minmax(0, 1fr)
+    var(--docs-toc-width);
+  margin-inline: auto;
+  max-width: var(--docs-layout-width);
+  min-height: 100dvh;
+  padding-top: var(--docs-header-height);
+}
+
+#nd-docs-layout[data-sidebar-transition="true"] {
+  transition: grid-template-columns 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (max-width: 47.99rem) {
+  #nd-docs-layout {
+    --docs-header-height: 3rem;
+  }
+}
+
+@media (min-width: 48rem) {
+  #nd-docs-layout[data-sidebar="open"] {
+    --fd-sidebar-col: var(--docs-sidebar-width);
+  }
+}
+
+@media (min-width: 80rem) {
+  #nd-docs-layout:has(.docs-toc-marker) {
+    --docs-toc-width: 15.5rem;
+  }
+}
+
+/* Sidebar list fades at the top and bottom edges while scrolling. */
+.docs-sidebar-scroll {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 14px,
+    #000 calc(100% - 14px),
+    transparent
+  );
+}
+
+/*
+ * Table of contents rail: the list's start border is the hairline and the
+ * pseudo-element is the active segment that slides along it.
+ */
+.docs-toc-rail {
+  --toc-indicator-top: 0px;
+  --toc-indicator-height: 0px;
+}
+
+.docs-toc-rail::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: -1px;
+  top: var(--toc-indicator-top);
+  height: var(--toc-indicator-height);
+  width: 1px;
+  background: var(--color-fd-rail);
+  transition:
+    top 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    height 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 160ms ease;
+  opacity: var(--toc-indicator-opacity, 0);
+}
+
+/* Prose adjustments for the docs body. */
+.docs-body {
+  --tw-prose-body: color-mix(
+    in oklab,
+    var(--color-fd-foreground) 86%,
+    transparent
+  );
+}
+
+.docs-body :where(h2):not(:where(.not-prose *)) {
+  margin-top: 2.75em;
+  margin-bottom: 0.9em;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.docs-body :where(h3):not(:where(.not-prose *)) {
+  margin-top: 2em;
+  margin-bottom: 0.7em;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.docs-body :where(h2 + h3, h2 + p, h3 + p):not(:where(.not-prose *)) {
+  margin-top: 0;
+}
+
+.docs-body :where(p, li):not(:where(.not-prose *)) {
+  line-height: 1.7;
+}
+
+.docs-body :where(code):not(:where(pre *, .not-prose *)) {
+  border: 1px solid var(--color-fd-border);
+  background: var(--color-fd-secondary);
+  border-radius: 0.3rem;
+  padding: 0.1rem 0.35rem;
+  font-size: 0.85em;
+  font-weight: 450;
+}
+
+.docs-body :where(table):not(:where(.not-prose *)) {
+  font-size: 0.875rem;
+}
+
+.docs-body :where(th):not(:where(.not-prose *)) {
+  font-weight: 500;
+  color: var(--color-fd-muted-foreground);
+}
+
+.docs-body :where(pre):not(:where(.not-prose *)) {
+  font-size: 0.8125rem;
 }

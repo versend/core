@@ -1,15 +1,17 @@
+import { createRelativeLink } from "fumadocs-ui/mdx";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+
 import {
   DocsBody,
   DocsDescription,
   DocsPage,
   DocsTitle,
-  MarkdownCopyButton,
-  ViewOptionsPopover,
-} from "fumadocs-ui/layouts/docs/page";
-import { createRelativeLink } from "fumadocs-ui/mdx";
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-
+} from "@/components/docs/docs-page";
+import {
+  CopyMarkdownButton,
+  EditOnGitHub,
+} from "@/components/docs/page-actions";
 import { getMDXComponents } from "@/components/mdx";
 import { getPageImageUrl, getPageMarkdownUrl, gitConfig } from "@/lib/shared";
 import { source } from "@/lib/source";
@@ -23,20 +25,21 @@ const Page = async (props: PageProps<"/docs/[[...slug]]">) => {
 
   const PageBody = page.data.body;
   const markdownUrl = getPageMarkdownUrl(page).url;
+  const githubUrl = `https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/apps/docs/content/docs/${page.path}`;
 
   return (
-    <DocsPage toc={page.data.toc} full={page.data.full}>
-      <DocsTitle>{page.data.title}</DocsTitle>
-      <DocsDescription className="mb-0">
-        {page.data.description}
-      </DocsDescription>
-      <div className="flex flex-row items-center gap-2 border-b pb-6">
-        <MarkdownCopyButton markdownUrl={markdownUrl} />
-        <ViewOptionsPopover
-          markdownUrl={markdownUrl}
-          githubUrl={`https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/apps/docs/content/docs/${page.path}`}
-        />
+    <DocsPage
+      full={page.data.full}
+      toc={page.data.toc}
+      tocFooter={<EditOnGitHub className="w-fit" href={githubUrl} />}
+    >
+      <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between md:gap-6">
+        <DocsTitle>{page.data.title}</DocsTitle>
+        <div className="shrink-0 md:pt-1.5">
+          <CopyMarkdownButton markdownUrl={markdownUrl} />
+        </div>
       </div>
+      <DocsDescription>{page.data.description}</DocsDescription>
       <DocsBody>
         <PageBody
           components={getMDXComponents({
