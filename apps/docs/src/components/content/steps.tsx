@@ -29,7 +29,7 @@ export const Step = ({ className, ...props }: ComponentProps<"div">) => (
   <div
     className={cn(
       "relative pb-7 [counter-increment:step] last:pb-0 [&>:first-child]:mt-0",
-      "before:border-fd-border before:bg-fd-background before:text-fd-muted-foreground before:text-2xs before:absolute before:-start-10.25 before:top-0.5 before:flex before:size-6.5 before:items-center before:justify-center before:rounded-full before:border before:font-mono before:font-medium before:content-[counter(step)]",
+      "before:border-fd-border before:bg-fd-background before:text-fd-muted-foreground before:text-2xs before:absolute before:-start-10.25 before:top-0.5 before:flex before:size-6.5 before:items-center before:justify-center before:rounded-xs before:border before:font-mono before:font-medium before:content-[counter(step)]",
       className
     )}
     {...props}
