@@ -130,7 +130,7 @@ const SidebarIsland = ({
   <div
     aria-hidden={!visible}
     className={cn(
-      "border-fd-border bg-fd-background/90 fixed top-3 left-3 z-30 hidden items-center gap-0.5 rounded-lg border p-0.5 shadow-sm backdrop-blur md:flex",
+      "border-fd-border bg-fd-background/90 fixed top-3 left-3 z-30 hidden items-center gap-0.5 rounded-sm border p-0.5 backdrop-blur md:flex",
       "transition-all duration-200 ease-out",
       visible
         ? "opacity-100 delay-150"
@@ -219,7 +219,7 @@ const MobileDrawer = ({
     <dialog
       aria-label="Documentation navigation"
       className={cn(
-        "border-fd-border bg-fd-background text-fd-foreground fixed inset-y-0 left-0 m-0 h-dvh max-h-none w-72 max-w-full flex-col border-r p-0 shadow-xl open:flex md:hidden",
+        "border-fd-border bg-fd-background text-fd-foreground fixed inset-y-0 left-0 m-0 h-dvh max-h-none w-72 max-w-full flex-col border-r p-0 open:flex md:hidden",
         "backdrop:bg-fd-overlay",
         "transition-transform duration-200 ease-out starting:open:-translate-x-full"
       )}
