@@ -1,9 +1,9 @@
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import type { MDXComponents } from "mdx/types";
 
-import { Card, Cards } from "./content/card";
-import { createHeading } from "./content/heading";
-import { Step, Steps } from "./content/steps";
+import { Card, Cards } from "./card";
+import { createHeading } from "./heading";
+import { Step, Steps } from "./steps";
 
 /**
  * Merges Fumadocs MDX components with local overrides.

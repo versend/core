@@ -4,11 +4,11 @@ import { useSearchContext } from "fumadocs-ui/contexts/search";
 import { SearchIcon } from "lucide-react";
 import Link from "next/link";
 
-import { gitConfig } from "@/lib/shared";
+import { GitHubIcon } from "@/components/ui/github-icon";
+import { IconButton, IconLink } from "@/components/ui/icon-button";
+import { repositoryUrl } from "@/lib/site";
 
 import { Brand } from "./brand";
-import { GitHubIcon } from "./github-icon";
-import { IconButton, IconLink } from "./icon-button";
 import { ThemeToggle } from "./theme-toggle";
 
 /**
@@ -43,7 +43,7 @@ export const SiteHeader = () => {
             </IconButton>
           ) : null}
           <IconLink
-            href={`https://github.com/${gitConfig.user}/${gitConfig.repo}`}
+            href={repositoryUrl}
             label="GitHub repository"
             rel="noreferrer"
             target="_blank"

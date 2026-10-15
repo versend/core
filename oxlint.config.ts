@@ -30,7 +30,7 @@ export default defineConfig({
   jsPlugins: [...jsPlugins.jsPlugins, ...shadcn.jsPlugins],
   overrides: [
     {
-      files: ["apps/docs/src/app/search-highlight.tsx"],
+      files: ["apps/docs/src/components/site/search-highlight.tsx"],
       rules: {
         // ::highlight() is not a LightningCSS pseudo. The rule has to ship as raw CSS.
         "shadcn/no-inline-styles": "off",

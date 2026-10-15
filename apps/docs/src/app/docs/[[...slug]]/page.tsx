@@ -7,13 +7,14 @@ import {
   DocsDescription,
   DocsPage,
   DocsTitle,
-} from "@/components/docs/docs-page";
+} from "@/components/docs-page/docs-page";
 import {
   CopyMarkdownButton,
   EditOnGitHub,
-} from "@/components/docs/page-actions";
-import { getMDXComponents } from "@/components/mdx";
-import { getPageImageUrl, getPageMarkdownUrl, gitConfig } from "@/lib/shared";
+} from "@/components/docs-page/page-actions";
+import { getMDXComponents } from "@/components/mdx/components";
+import { getPageImageUrl, getPageMarkdownUrl } from "@/lib/routes";
+import { pageSourceUrl } from "@/lib/site";
 import { source } from "@/lib/source";
 
 const Page = async (props: PageProps<"/docs/[[...slug]]">) => {
@@ -24,19 +25,19 @@ const Page = async (props: PageProps<"/docs/[[...slug]]">) => {
   }
 
   const PageBody = page.data.body;
-  const markdownUrl = getPageMarkdownUrl(page).url;
-  const githubUrl = `https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/apps/docs/content/docs/${page.path}`;
 
   return (
     <DocsPage
       full={page.data.full}
       toc={page.data.toc}
-      tocFooter={<EditOnGitHub className="w-fit" href={githubUrl} />}
+      tocFooter={
+        <EditOnGitHub className="w-fit" href={pageSourceUrl(page.path)} />
+      }
     >
       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between md:gap-6">
         <DocsTitle>{page.data.title}</DocsTitle>
         <div className="shrink-0 md:pt-1.5">
-          <CopyMarkdownButton markdownUrl={markdownUrl} />
+          <CopyMarkdownButton markdownUrl={getPageMarkdownUrl(page).url} />
         </div>
       </div>
       <DocsDescription>{page.data.description}</DocsDescription>

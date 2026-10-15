@@ -45,7 +45,8 @@ export const Frame = ({
 );
 
 /**
- * Thin header strip for a {@link Frame}, with a mono label.
+ * Thin header strip for a {@link Frame}, with a mono label. `wrap` lets the
+ * header grow when its content breaks onto several lines.
  *
  * @param props - Header props.
  * @returns The header element.
@@ -53,11 +54,13 @@ export const Frame = ({
 export const FrameHeader = ({
   children,
   className,
+  wrap = false,
   ...props
-}: ComponentProps<"div">) => (
+}: ComponentProps<"div"> & { wrap?: boolean }) => (
   <div
     className={cn(
-      "border-fd-border text-fd-muted-foreground text-2xs flex h-9 items-center justify-between gap-3 border-b px-3 font-mono tracking-wider uppercase",
+      "border-fd-border text-fd-muted-foreground text-2xs flex items-center justify-between gap-3 border-b px-3 font-mono tracking-wider uppercase",
+      wrap ? "flex-wrap gap-y-2 py-1.5" : "h-9",
       className
     )}
     {...props}

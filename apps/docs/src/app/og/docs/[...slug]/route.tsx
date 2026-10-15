@@ -1,6 +1,7 @@
 import { generateOGImage } from "fumadocs-ui/og/takumi";
 import { notFound } from "next/navigation";
 
+import { appName } from "@/lib/site";
 import { source } from "@/lib/source";
 
 export const revalidate = false;
@@ -25,7 +26,7 @@ export const GET = async (
   return generateOGImage({
     description: page.data.description,
     format: "webp",
-    site: "My App",
+    site: appName,
     title: page.data.title,
   });
 };

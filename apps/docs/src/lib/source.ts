@@ -3,7 +3,7 @@ import { lucideIconsPlugin } from "fumadocs-core/source/lucide-icons";
 import { metaSchema, pageSchema } from "fumadocs-core/source/schema";
 import { defineDocs } from "fumadocs-mdx/macro";
 
-import { docsRoute } from "./shared";
+import { docsRoute } from "./routes";
 
 const docs = defineDocs({
   dir: "content/docs",

@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { cn } from "@/lib/cn";
-import { appName } from "@/lib/shared";
+import { appName } from "@/lib/site";
 
 /**
  * Wordmark link that points back to the landing page.

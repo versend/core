@@ -3,9 +3,8 @@ import { RootProvider } from "fumadocs-ui/provider/next";
 import "./global.css";
 import { Geist_Mono, Inter } from "next/font/google";
 
-import { appName } from "@/lib/shared";
-
-import { SearchHighlight } from "./search-highlight";
+import { SearchHighlight } from "@/components/site/search-highlight";
+import { appName, siteDescription } from "@/lib/site";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -18,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  description: "Vercel events delivered to the destinations you configure.",
+  description: siteDescription,
   title: {
     default: appName,
     template: `%s | ${appName}`,
