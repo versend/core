@@ -27,11 +27,23 @@
   --color-fd-secondary-foreground: hsl(30, 4%, 10%);
   --color-fd-accent: hsla(40, 6%, 84%, 55%);
   --color-fd-accent-foreground: hsl(30, 4%, 10%);
-  --color-fd-border: hsla(30, 6%, 70%, 45%);
+  --color-fd-border: hsla(30, 5%, 45%, 32%);
   --color-fd-ring: hsl(30, 4%, 60%);
   --color-fd-overlay: hsla(0, 0%, 0%, 0.25);
   --color-fd-rail: hsl(30, 3%, 18%);
+  --color-fd-ink: hsl(30, 4%, 14%);
   --color-fd-success: oklch(72.3% 0.219 149.579);
+  --color-fd-error: oklch(63.7% 0.237 25.331);
+  --color-fd-warning: oklch(76.9% 0.188 70.08);
+
+  /* Squared corners: everything is drawn with a ruler. */
+  --radius-xs: 1px;
+  --radius-sm: 2px;
+  --radius-md: 2px;
+  --radius-lg: 3px;
+  --radius-xl: 3px;
+  --radius-2xl: 4px;
+  --radius-3xl: 4px;
 
   --text-2xs: 0.6875rem;
   --text-2xs--line-height: 1rem;
@@ -62,10 +74,50 @@
   --color-fd-secondary-foreground: hsl(40, 10%, 92%);
   --color-fd-accent: hsla(240, 5%, 40%, 30%);
   --color-fd-accent-foreground: hsl(40, 10%, 94%);
-  --color-fd-border: hsla(240, 5%, 45%, 22%);
+  --color-fd-border: hsla(240, 5%, 60%, 26%);
   --color-fd-ring: hsl(240, 4%, 55%);
   --color-fd-overlay: hsla(0, 0%, 0%, 0.5);
   --color-fd-rail: hsl(40, 10%, 92%);
+  --color-fd-ink: hsl(40, 10%, 88%);
+}
+
+/* Pen weight: outline icons are drawn with a thinner nib. */
+svg.lucide {
+  stroke-width: 1.5;
+}
+
+/* Dotted graph paper used behind the landing sections. */
+@utility grid-paper {
+  background-image: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--color-fd-foreground) 14%, transparent) 0.75px,
+    transparent 0.75px
+  );
+  background-size: 18px 18px;
+  background-position: center;
+}
+
+/* Hairline that runs through the landing page shell. */
+@utility hairline {
+  background-color: var(--color-fd-border);
+}
+
+/* Animated stroke used by the pipeline drawing. */
+@utility pen-flow {
+  stroke-dasharray: 4 6;
+  animation: pen-flow 1.6s linear infinite;
+}
+
+@keyframes pen-flow {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pen-flow {
+    animation: none;
+  }
 }
 
 html {
@@ -112,6 +164,12 @@ pre {
     var(--fd-sidebar-col)
     minmax(0, 1fr)
     var(--docs-toc-width);
+  /*
+   * `body` is a column flex container; without an explicit width the auto
+   * margins would shrink the grid to its content and re-centre it on every
+   * page, which is what made the layout jump between routes.
+   */
+  width: 100%;
   margin-inline: auto;
   max-width: var(--docs-layout-width);
   min-height: 100dvh;
@@ -211,7 +269,7 @@ pre {
 .docs-body :where(code):not(:where(pre *, .not-prose *)) {
   border: 1px solid var(--color-fd-border);
   background: var(--color-fd-secondary);
-  border-radius: 0.3rem;
+  border-radius: var(--radius-sm);
   padding: 0.1rem 0.35rem;
   font-size: 0.85em;
   font-weight: 450;

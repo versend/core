@@ -96,18 +96,15 @@ const TocItems = () => {
 };
 
 /**
- * Sticky table of contents for the right-hand column. Hidden below `xl`;
- * the matching `.docs-toc-marker` lets the layout reserve the column.
+ * Sticky table of contents for the right-hand column. Hidden below `xl`.
+ * The column is always rendered, even without headings, so the main column
+ * keeps the same width from page to page.
  *
  * @param props - Optional footer slot.
  * @returns The TOC element.
  */
 export const DocsToc = ({ footer }: { footer?: ReactNode }) => {
   const items = useTOCItems();
-
-  if (items.length === 0 && !footer) {
-    return null;
-  }
 
   return (
     <>

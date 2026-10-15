@@ -13,6 +13,7 @@ import type { ComponentProps, ReactNode } from "react";
 import { Fragment, useMemo } from "react";
 
 import { cn } from "@/lib/cn";
+import { docsRoute } from "@/lib/shared";
 
 import { DocsToc } from "./docs-toc";
 
@@ -21,14 +22,15 @@ const emptyToc: TableOfContents = [];
 const Breadcrumb = () => {
   const path = useTreePath();
   const { root } = useTreeContext();
+  // The root is always included so every page has a breadcrumb row and the
+  // title sits at the same height across the site.
   const items = useMemo(
-    () => getBreadcrumbItemsFromPath(root, path, { includePage: false }),
+    () => [
+      { name: "Docs", url: docsRoute },
+      ...getBreadcrumbItemsFromPath(root, path, { includePage: false }),
+    ],
     [path, root]
   );
-
-  if (items.length === 0) {
-    return null;
-  }
 
   return (
     <nav
