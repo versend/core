@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 
-import { health } from "../health/route";
-import { vercelWebhook } from "../vercel-webhooks/route";
+import { health } from "@/health/route";
+import { vercelWebhook } from "@/vercel-webhooks/route";
 
 /**
  * Builds the Hono app.

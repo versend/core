@@ -1,9 +1,17 @@
-import { sendWithRetry } from "../../delivery/retry";
-import type { VercelWebhook } from "../../vercel-webhooks/payload";
-import { deliveryCard } from "../present/card";
-import type { DeliveryTone } from "../present/tone";
+import { sendWithRetry } from "@/delivery/retry";
+import { markdownCard } from "@/notifications/markdown-card";
+import type { NotificationTone } from "@/notifications/tone";
+import type { VercelWebhook } from "@/vercel-webhooks/payload";
 
-const priorityByTone: Record<DeliveryTone, string> = {
+/**
+ * Topic ntfy messages are published to.
+ */
+export interface NtfyTarget {
+  token?: string;
+  url: string;
+}
+
+const priorityByTone: Record<NotificationTone, string> = {
   failure: "urgent",
   neutral: "low",
   notice: "high",
@@ -15,16 +23,13 @@ const priorityByTone: Record<DeliveryTone, string> = {
  * Publishes the webhook to an ntfy topic.
  *
  * @param webhook - Verified Vercel webhook.
- * @param url - Topic URL.
- * @param token - Access token, when the topic is protected.
+ * @param target - Topic URL and optional access token.
  */
 export const postNtfy = async (
   webhook: VercelWebhook,
-  url: string,
-  token: string | undefined
+  target: NtfyTarget
 ): Promise<void> => {
-  const card = deliveryCard(webhook);
-  const accessToken = token?.trim();
+  const card = markdownCard(webhook);
   const headers = new Headers({
     Markdown: "yes",
     Priority: priorityByTone[card.tone],
@@ -34,12 +39,12 @@ export const postNtfy = async (
   if (card.click) {
     headers.set("Click", card.click);
   }
-  if (accessToken) {
-    headers.set("Authorization", `Bearer ${accessToken}`);
+  if (target.token) {
+    headers.set("Authorization", `Bearer ${target.token}`);
   }
 
   await sendWithRetry(() =>
-    fetch(url, {
+    fetch(target.url, {
       body: card.markdown,
       headers,
       method: "POST",

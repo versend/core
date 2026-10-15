@@ -1,9 +1,9 @@
-import type { VercelEventName } from "../../vercel-webhooks/event-names";
+import type { VercelEventName } from "@/vercel-webhooks/event-names";
 
 /**
- * Status color for a Vercel event.
+ * Outcome class of a Vercel event. Destinations map it to a color or priority.
  */
-export type DeliveryTone =
+export type NotificationTone =
   | "failure"
   | "neutral"
   | "notice"
@@ -52,12 +52,12 @@ const isSuccess = (type: string): boolean =>
   type.endsWith(".succeeded");
 
 /**
- * Tone used to color a destination card.
+ * Tone of a Vercel event.
  *
  * @param type - Vercel event name.
  * @returns The result.
  */
-export const deliveryTone = (type: VercelEventName): DeliveryTone => {
+export const notificationTone = (type: VercelEventName): NotificationTone => {
   if (isNotice(type)) {
     return "notice";
   }
@@ -71,46 +71,4 @@ export const deliveryTone = (type: VercelEventName): DeliveryTone => {
     return "success";
   }
   return "neutral";
-};
-
-/**
- * Status mark for a Telegram message.
- *
- * @param type - Vercel event name.
- * @param tone - Delivery tone.
- * @returns The result.
- */
-export const deliveryMark = (
-  type: VercelEventName,
-  tone: DeliveryTone
-): string | undefined => {
-  if (type === "alerts.triggered") {
-    return "🚨";
-  }
-  if (type === "deployment.promoted") {
-    return "⬆️";
-  }
-  if (type === "deployment.rollback") {
-    return "↩️";
-  }
-  if (
-    type.endsWith("aborted") ||
-    type.endsWith("canceled") ||
-    type.endsWith(".cancel")
-  ) {
-    return "🚫";
-  }
-  if (tone === "success") {
-    return "✅";
-  }
-  if (tone === "failure") {
-    return "❌";
-  }
-  if (tone === "progress") {
-    return "⏳";
-  }
-  if (tone === "notice") {
-    return "✦";
-  }
-  return undefined;
 };

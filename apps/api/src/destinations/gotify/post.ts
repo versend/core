@@ -1,9 +1,17 @@
-import { sendWithRetry } from "../../delivery/retry";
-import type { VercelWebhook } from "../../vercel-webhooks/payload";
-import { deliveryCard } from "../present/card";
-import type { DeliveryTone } from "../present/tone";
+import { sendWithRetry } from "@/delivery/retry";
+import { markdownCard } from "@/notifications/markdown-card";
+import type { NotificationTone } from "@/notifications/tone";
+import type { VercelWebhook } from "@/vercel-webhooks/payload";
 
-const priorityByTone: Record<DeliveryTone, number> = {
+/**
+ * Gotify server and application messages are pushed to.
+ */
+export interface GotifyTarget {
+  server: string;
+  token: string;
+}
+
+const priorityByTone: Record<NotificationTone, number> = {
   failure: 8,
   neutral: 2,
   notice: 5,
@@ -11,28 +19,25 @@ const priorityByTone: Record<DeliveryTone, number> = {
   success: 4,
 };
 
+const trailingSlashes = /\/+$/u;
+
 /**
  * Pushes the webhook to a Gotify application.
  *
  * @param webhook - Verified Vercel webhook.
- * @param server - Gotify base URL.
- * @param token - Application token.
+ * @param target - Gotify base URL and application token.
  */
 export const postGotify = async (
   webhook: VercelWebhook,
-  server: string,
-  token: string
+  target: GotifyTarget
 ): Promise<void> => {
-  const card = deliveryCard(webhook);
+  const card = markdownCard(webhook);
   const display = { "client::display": { contentType: "text/markdown" } };
   const extras = card.click
-    ? {
-        ...display,
-        "client::notification": { click: { url: card.click } },
-      }
+    ? { ...display, "client::notification": { click: { url: card.click } } }
     : display;
 
-  const endpoint = `${server.replace(/\/+$/u, "")}/message`;
+  const endpoint = `${target.server.replace(trailingSlashes, "")}/message`;
   await sendWithRetry(() =>
     fetch(endpoint, {
       body: JSON.stringify({
@@ -43,7 +48,7 @@ export const postGotify = async (
       }),
       headers: {
         "content-type": "application/json",
-        "x-gotify-key": token.trim(),
+        "x-gotify-key": target.token,
       },
       method: "POST",
     })

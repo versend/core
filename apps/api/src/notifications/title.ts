@@ -1,4 +1,4 @@
-import type { VercelEventName } from "../../vercel-webhooks/event-names";
+import type { VercelEventName } from "@/vercel-webhooks/event-names";
 
 const wordBreak = /[.-]/u;
 
@@ -86,10 +86,10 @@ const sentence = (type: string): string => {
 };
 
 /**
- * Human title for a Vercel event.
+ * Human title of a Vercel event.
  *
  * @param type - Vercel event name.
  * @returns The result.
  */
-export const deliveryTitle = (type: VercelEventName): string =>
+export const notificationTitle = (type: VercelEventName): string =>
   titles[type] ?? sentence(type);

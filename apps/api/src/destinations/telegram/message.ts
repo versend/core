@@ -1,6 +1,8 @@
-import type { VercelWebhook } from "../../vercel-webhooks/payload";
-import type { CommitFact, DeliveryFacts } from "../present/facts";
-import { deliveryFacts } from "../present/facts";
+import { defaultAuthor } from "@/notifications/author";
+import type { NotificationCommit } from "@/notifications/commit";
+import { buildNotification } from "@/notifications/notification";
+import type { Notification } from "@/notifications/notification";
+import type { VercelWebhook } from "@/vercel-webhooks/payload";
 
 const escapeHtml = (value: string): string =>
   value
@@ -8,31 +10,31 @@ const escapeHtml = (value: string): string =>
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;");
 
-const heading = (facts: DeliveryFacts): string => {
-  const title = escapeHtml(facts.title);
-  return facts.mark ? `${facts.mark} ${title}` : title;
-};
-
 const escapeAttr = (value: string): string =>
   escapeHtml(value).replaceAll('"', "&quot;");
 
-const commitBit = (commit: CommitFact): string => {
-  const short = escapeHtml(commit.short);
-  if (!commit.url) {
-    return `<code>${short}</code>`;
-  }
-  return `<a href="${escapeAttr(commit.url)}">${short}</a>`;
+const anchor = (url: string, label: string): string =>
+  `<a href="${escapeAttr(url)}">${label}</a>`;
+
+const heading = (notification: Notification): string => {
+  const title = escapeHtml(notification.title);
+  return notification.mark ? `${notification.mark} ${title}` : title;
 };
 
-const metaLine = (facts: DeliveryFacts): string | undefined => {
+const commitBit = (commit: NotificationCommit): string => {
+  const short = escapeHtml(commit.short);
+  return commit.url ? anchor(commit.url, short) : `<code>${short}</code>`;
+};
+
+const metaLine = (notification: Notification): string | undefined => {
   const bits: string[] = [];
-  if (facts.environment) {
-    bits.push(`<code>${escapeHtml(facts.environment)}</code>`);
+  if (notification.environment) {
+    bits.push(`<code>${escapeHtml(notification.environment)}</code>`);
   }
-  if (facts.branch) {
-    bits.push(`<code>${escapeHtml(facts.branch)}</code>`);
+  if (notification.branch) {
+    bits.push(`<code>${escapeHtml(notification.branch)}</code>`);
   }
-  const { commit } = facts;
+  const { commit } = notification;
   if (commit) {
     bits.push(commitBit(commit));
   }
@@ -45,25 +47,28 @@ const metaLine = (facts: DeliveryFacts): string | undefined => {
   return bits.join(" · ");
 };
 
-const commitQuote = (facts: DeliveryFacts): string | undefined => {
-  if (!facts.subject) {
+const commitQuote = (notification: Notification): string | undefined => {
+  if (!notification.subject) {
     return undefined;
   }
 
-  const subject = `<b>${escapeHtml(facts.subject)}</b>`;
-  if (!facts.body) {
+  const subject = `<b>${escapeHtml(notification.subject)}</b>`;
+  if (!notification.body) {
     return `<blockquote>${subject}</blockquote>`;
   }
-  return `<blockquote>${subject}\n${escapeHtml(facts.body)}</blockquote>`;
+  return `<blockquote>${subject}\n${escapeHtml(notification.body)}</blockquote>`;
 };
 
-const linkLine = (facts: DeliveryFacts): string | undefined => {
+const linkLine = (notification: Notification): string | undefined => {
   const links: string[] = [];
-  if (facts.openUrl) {
-    links.push(`<a href="${escapeAttr(facts.openUrl)}">Open</a>`);
+  if (notification.openUrl) {
+    links.push(anchor(notification.openUrl, "Open"));
   }
-  if (facts.inspectUrl && facts.inspectUrl !== facts.openUrl) {
-    links.push(`<a href="${escapeAttr(facts.inspectUrl)}">Inspect</a>`);
+  if (
+    notification.inspectUrl &&
+    notification.inspectUrl !== notification.openUrl
+  ) {
+    links.push(anchor(notification.inspectUrl, "Inspect"));
   }
   if (links.length === 0) {
     return undefined;
@@ -78,12 +83,12 @@ const linkLine = (facts: DeliveryFacts): string | undefined => {
  * @returns The result.
  */
 export const telegramMessage = (webhook: VercelWebhook): string => {
-  const facts = deliveryFacts(webhook);
-  const lines = [`<b>${heading(facts)}</b>`];
+  const notification = buildNotification(webhook);
+  const lines = [`<b>${heading(notification)}</b>`];
 
-  const meta = metaLine(facts);
-  if (facts.author !== "Versend") {
-    lines.push("", `<b>${escapeHtml(facts.author)}</b>`);
+  const meta = metaLine(notification);
+  if (notification.author !== defaultAuthor) {
+    lines.push("", `<b>${escapeHtml(notification.author)}</b>`);
     if (meta) {
       lines.push(meta);
     }
@@ -91,19 +96,19 @@ export const telegramMessage = (webhook: VercelWebhook): string => {
     lines.push("", meta);
   }
 
-  const quote = commitQuote(facts);
+  const quote = commitQuote(notification);
   if (quote) {
     lines.push("", quote);
   }
-  if (facts.buildError) {
+  if (notification.buildError) {
     lines.push(
       "",
       "<b>Build error</b>",
-      `<pre>${escapeHtml(facts.buildError)}</pre>`
+      `<pre>${escapeHtml(notification.buildError)}</pre>`
     );
   }
 
-  const links = linkLine(facts);
+  const links = linkLine(notification);
   if (links) {
     lines.push("", links);
   }

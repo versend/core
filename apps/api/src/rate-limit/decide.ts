@@ -1,4 +1,5 @@
-import { ENV } from "../bootstrap/env";
+import { ENV } from "@/config/env";
+
 import { clientIp } from "./client-ip";
 import { takeSlot } from "./window";
 
