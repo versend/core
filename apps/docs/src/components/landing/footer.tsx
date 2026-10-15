@@ -1,9 +1,9 @@
 import Link from "next/link";
 
 import { Brand } from "@/components/site/brand";
-import { GitHubIcon } from "@/components/site/github-icon";
 import { ThemeToggle } from "@/components/site/theme-toggle";
-import { gitConfig } from "@/lib/shared";
+import { GitHubIcon } from "@/components/ui/github-icon";
+import { repositoryUrl } from "@/lib/site";
 
 import { Section } from "./section";
 
@@ -41,7 +41,7 @@ export const Footer = () => (
         <a
           aria-label="GitHub repository"
           className="text-fd-muted-foreground hover:text-fd-foreground inline-flex size-8 items-center justify-center transition-colors"
-          href={`https://github.com/${gitConfig.user}/${gitConfig.repo}`}
+          href={repositoryUrl}
           rel="noreferrer"
           target="_blank"
         >

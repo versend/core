@@ -55,4 +55,4 @@ lerna-debug.log*
 next-env.d.ts
 
 !.env.schema
-/src/bootstrap/env.ts
+/src/config/env.ts

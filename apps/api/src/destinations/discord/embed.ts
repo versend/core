@@ -1,8 +1,20 @@
-import type { VercelWebhook } from "../../vercel-webhooks/payload";
-import type { CommitFact, DeliveryFacts } from "../present/facts";
-import { deliveryFacts } from "../present/facts";
-import { clip } from "../present/text";
-import { discordAuthor, toneColor } from "./appearance";
+import { clip } from "@/notifications/clip";
+import type { NotificationCommit } from "@/notifications/commit";
+import { buildNotification } from "@/notifications/notification";
+import type { Notification } from "@/notifications/notification";
+import { toneColor } from "@/notifications/tone-color";
+import type { VercelWebhook } from "@/vercel-webhooks/payload";
+
+import { discordIdentity } from "./identity";
+
+const limits = {
+  code: 80,
+  description: 4000,
+  fence: 900,
+  footer: 2048,
+  name: 256,
+  title: 256,
+} as const;
 
 /**
  * Discord webhook embed.
@@ -11,11 +23,17 @@ export interface DiscordEmbed {
   author: { name: string; url: string; icon_url: string };
   color: number;
   description?: string;
-  fields?: { name: string; value: string; inline?: boolean }[];
+  fields?: DiscordField[];
   footer?: { text: string; icon_url: string };
   timestamp: string;
   title: string;
   url?: string;
+}
+
+interface DiscordField {
+  name: string;
+  value: string;
+  inline?: boolean;
 }
 
 const quote = (body: string): string | undefined => {
@@ -30,20 +48,20 @@ const quote = (body: string): string | undefined => {
   return lines.join("\n");
 };
 
-const discordDescription = (facts: DeliveryFacts): string | undefined => {
-  if (!facts.subject) {
+const description = (notification: Notification): string | undefined => {
+  if (!notification.subject) {
     return undefined;
   }
 
-  const lines = [`**${facts.subject.replaceAll("*", "")}**`];
-  const quoted = facts.body ? quote(facts.body) : undefined;
+  const lines = [`**${notification.subject.replaceAll("*", "")}**`];
+  const quoted = notification.body ? quote(notification.body) : undefined;
   if (quoted) {
     lines.push("", quoted);
   }
-  return clip(lines.join("\n"), 4000);
+  return clip(lines.join("\n"), limits.description);
 };
 
-const commitValue = (commit: CommitFact): string => {
+const commitValue = (commit: NotificationCommit): string => {
   const label = `\`${commit.short.replaceAll("`", "")}\``;
   const linked = commit.url ? `[${label}](${commit.url})` : label;
   if (!commit.author) {
@@ -53,41 +71,47 @@ const commitValue = (commit: CommitFact): string => {
 };
 
 const code = (value: string): string =>
-  `\`${clip(value.replaceAll("`", ""), 80)}\``;
+  `\`${clip(value.replaceAll("`", ""), limits.code)}\``;
 
-const fence = (value: string): string => `\`\`\`\n${clip(value, 900)}\n\`\`\``;
+const fence = (value: string): string =>
+  `\`\`\`\n${clip(value, limits.fence)}\n\`\`\``;
 
-const discordFields = (
-  facts: DeliveryFacts
-): NonNullable<DiscordEmbed["fields"]> => {
-  const fields: NonNullable<DiscordEmbed["fields"]> = [];
-  if (facts.environment) {
-    fields.push({
+const fields = (notification: Notification): DiscordField[] => {
+  const list: DiscordField[] = [];
+  if (notification.environment) {
+    list.push({
       inline: true,
       name: "Environment",
-      value: code(facts.environment),
+      value: code(notification.environment),
     });
   }
-  if (facts.branch) {
-    fields.push({ inline: true, name: "Branch", value: code(facts.branch) });
+  if (notification.branch) {
+    list.push({
+      inline: true,
+      name: "Branch",
+      value: code(notification.branch),
+    });
   }
-  if (facts.commit) {
-    fields.push({
+  if (notification.commit) {
+    list.push({
       inline: true,
       name: "Commit",
-      value: commitValue(facts.commit),
+      value: commitValue(notification.commit),
     });
   }
-  if (facts.buildError) {
-    fields.push({ name: "Build error", value: fence(facts.buildError) });
+  if (notification.buildError) {
+    list.push({ name: "Build error", value: fence(notification.buildError) });
   }
-  if (facts.inspectUrl && facts.inspectUrl !== facts.openUrl) {
-    fields.push({
+  if (
+    notification.inspectUrl &&
+    notification.inspectUrl !== notification.openUrl
+  ) {
+    list.push({
       name: "Inspect",
-      value: `[Open in Vercel](${facts.inspectUrl})`,
+      value: `[Open in Vercel](${notification.inspectUrl})`,
     });
   }
-  return fields;
+  return list;
 };
 
 /**
@@ -97,34 +121,34 @@ const discordFields = (
  * @returns The result.
  */
 export const discordEmbed = (webhook: VercelWebhook): DiscordEmbed => {
-  const facts = deliveryFacts(webhook);
-  const titleUrl = facts.openUrl ?? facts.inspectUrl;
+  const notification = buildNotification(webhook);
+  const titleUrl = notification.openUrl ?? notification.inspectUrl;
   const embed: DiscordEmbed = {
     author: {
-      icon_url: discordAuthor.iconUrl,
-      name: clip(facts.author, 256),
-      url: facts.authorUrl,
+      icon_url: discordIdentity.iconUrl,
+      name: clip(notification.author, limits.name),
+      url: notification.authorUrl,
     },
-    color: toneColor(facts.tone),
+    color: toneColor(notification.tone),
     footer: {
-      icon_url: discordAuthor.iconUrl,
-      text: clip(facts.footer, 2048),
+      icon_url: discordIdentity.iconUrl,
+      text: clip(notification.footer, limits.footer),
     },
-    timestamp: facts.createdAt,
-    title: clip(facts.title, 256),
+    timestamp: notification.createdAt,
+    title: clip(notification.title, limits.title),
   };
 
-  const description = discordDescription(facts);
-  if (description) {
-    embed.description = description;
+  const text = description(notification);
+  if (text) {
+    embed.description = text;
   }
   if (titleUrl) {
     embed.url = titleUrl;
   }
 
-  const fields = discordFields(facts);
-  if (fields.length > 0) {
-    embed.fields = fields;
+  const list = fields(notification);
+  if (list.length > 0) {
+    embed.fields = list;
   }
   return embed;
 };

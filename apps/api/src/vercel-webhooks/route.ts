@@ -1,11 +1,12 @@
 import { Hono } from "hono";
 
-import { ENV } from "../bootstrap/env";
-import { scheduleDelivery } from "../delivery/schedule";
-import { decideRateLimit } from "../rate-limit/decide";
-import { allowEvent } from "./allow-event";
-import { allowTarget } from "./allow-target";
-import { webhookSchema } from "./payload";
+import { ENV } from "@/config/env";
+import { scheduleDelivery } from "@/delivery/schedule";
+import { allowEvent } from "@/event-filters/allow-event";
+import { allowTarget } from "@/event-filters/allow-target";
+import { decideRateLimit } from "@/rate-limit/decide";
+
+import { parseWebhook } from "./parse";
 import { verifySignature } from "./verify-signature";
 
 const note = (status: number, detail: string): void => {
@@ -15,13 +16,7 @@ const note = (status: number, detail: string): void => {
 export const vercelWebhook = new Hono();
 
 vercelWebhook.get("/", (c) =>
-  c.json(
-    {
-      error: "method_not_allowed",
-      ok: false,
-    },
-    405
-  )
+  c.json({ error: "method_not_allowed", ok: false }, 405)
 );
 
 vercelWebhook.post("/", async (c) => {
@@ -47,35 +42,24 @@ vercelWebhook.post("/", async (c) => {
     return c.json({ error: "invalid_signature", ok: false }, 401);
   }
 
-  let body: unknown;
-  try {
-    body = JSON.parse(rawBody);
-  } catch {
-    note(400, "invalid_json");
-    return c.json({ error: "invalid_json", ok: false }, 400);
+  const parsed = parseWebhook(rawBody);
+  if (!parsed.ok) {
+    note(400, parsed.detail);
+    return c.json({ error: parsed.error, ok: false }, 400);
   }
 
-  const parsed = webhookSchema.safeParse(body);
-  if (!parsed.success) {
-    const fields = parsed.error.issues
-      .map((issue) => issue.path.join("."))
-      .slice(0, 5)
-      .join(",");
-    note(400, `invalid_payload ${fields}`);
-    return c.json({ error: "invalid_payload", ok: false }, 400);
-  }
-
-  if (!allowEvent(parsed.data.type)) {
-    note(200, `ignored event ${parsed.data.type}`);
+  const { webhook } = parsed;
+  if (!allowEvent(webhook.type)) {
+    note(200, `ignored event ${webhook.type}`);
     return c.json({ ignored: "event", ok: true });
   }
 
-  if (!allowTarget(parsed.data)) {
-    note(200, `ignored target ${parsed.data.type}`);
+  if (!allowTarget(webhook)) {
+    note(200, `ignored target ${webhook.type}`);
     return c.json({ ignored: "target", ok: true });
   }
 
-  scheduleDelivery(parsed.data);
-  note(200, parsed.data.type);
+  scheduleDelivery(webhook);
+  note(200, webhook.type);
   return c.json({ ok: true });
 });

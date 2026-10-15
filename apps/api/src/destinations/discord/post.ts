@@ -1,29 +1,33 @@
-import { ENV } from "../../bootstrap/env";
-import { sendWithRetry } from "../../delivery/retry";
-import type { VercelWebhook } from "../../vercel-webhooks/payload";
-import { discordAuthor } from "./appearance";
+import { sendWithRetry } from "@/delivery/retry";
+import type { VercelWebhook } from "@/vercel-webhooks/payload";
+
 import { discordEmbed } from "./embed";
+
+/**
+ * Where and as whom Discord messages are posted.
+ */
+export interface DiscordTarget {
+  avatarUrl: string;
+  url: string;
+  username: string;
+}
 
 /**
  * Sends the webhook to a Discord webhook URL.
  *
  * @param webhook - Verified Vercel webhook.
- * @param url - Destination URL.
+ * @param target - Discord webhook and bot appearance.
  */
 export const postDiscord = async (
   webhook: VercelWebhook,
-  url: string
+  target: DiscordTarget
 ): Promise<void> => {
-  const username = ENV.DISCORD_WEBHOOK_USERNAME?.trim() || "Versend";
-  const avatar =
-    ENV.DISCORD_WEBHOOK_AVATAR_URL?.trim() || discordAuthor.iconUrl;
-
   await sendWithRetry(() =>
-    fetch(url, {
+    fetch(target.url, {
       body: JSON.stringify({
-        avatar_url: avatar,
+        avatar_url: target.avatarUrl,
         embeds: [discordEmbed(webhook)],
-        username,
+        username: target.username,
       }),
       headers: { "content-type": "application/json" },
       method: "POST",

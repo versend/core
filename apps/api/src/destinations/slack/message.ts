@@ -1,7 +1,11 @@
-import type { VercelWebhook } from "../../vercel-webhooks/payload";
-import { toneColor } from "../discord/appearance";
-import { deliveryFacts } from "../present/facts";
-import { clip } from "../present/text";
+import { defaultAuthor } from "@/notifications/author";
+import { clip } from "@/notifications/clip";
+import { buildNotification } from "@/notifications/notification";
+import type { Notification } from "@/notifications/notification";
+import { toneColorHex } from "@/notifications/tone-color";
+import type { VercelWebhook } from "@/vercel-webhooks/payload";
+
+const limits = { fallback: 300, header: 150 } as const;
 
 interface SlackText {
   text: string;
@@ -23,16 +27,106 @@ export interface SlackPayload {
   text: string;
 }
 
-const slack = (value: string): string =>
+const escape = (value: string): string =>
   value
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;");
 
-const link = (url: string, label: string): string => `<${url}|${slack(label)}>`;
+const link = (url: string, label: string): string =>
+  `<${url}|${escape(label)}>`;
 
-const hex = (tone: Parameters<typeof toneColor>[0]): string =>
-  `#${toneColor(tone).toString(16).padStart(6, "0")}`;
+const mrkdwn = (text: string): SlackText => ({ text, type: "mrkdwn" });
+
+const factFields = (notification: Notification): SlackText[] => {
+  const fields: SlackText[] = [];
+  if (notification.environment) {
+    fields.push(
+      mrkdwn(`*Environment*\n\`${escape(notification.environment)}\``)
+    );
+  }
+  if (notification.branch) {
+    fields.push(mrkdwn(`*Branch*\n\`${escape(notification.branch)}\``));
+  }
+  if (notification.commit) {
+    const { commit } = notification;
+    const value = commit.url
+      ? link(commit.url, commit.short)
+      : `\`${escape(commit.short)}\``;
+    const author = commit.author ? ` · ${escape(commit.author)}` : "";
+    fields.push(mrkdwn(`*Commit*\n${value}${author}`));
+  }
+  return fields;
+};
+
+const linkLine = (notification: Notification): string | undefined => {
+  const links: string[] = [];
+  if (notification.openUrl) {
+    links.push(link(notification.openUrl, "Open"));
+  }
+  if (
+    notification.inspectUrl &&
+    notification.inspectUrl !== notification.openUrl
+  ) {
+    links.push(link(notification.inspectUrl, "Inspect"));
+  }
+  if (links.length === 0) {
+    return undefined;
+  }
+  return links.join(" · ");
+};
+
+const blocks = (notification: Notification): SlackBlock[] => {
+  const heading = notification.mark
+    ? `${notification.mark} ${notification.title}`
+    : notification.title;
+  const list: SlackBlock[] = [
+    {
+      text: { text: clip(heading, limits.header), type: "plain_text" },
+      type: "header",
+    },
+  ];
+
+  if (notification.author !== defaultAuthor) {
+    list.push({
+      elements: [mrkdwn(`*${escape(notification.author)}*`)],
+      type: "context",
+    });
+  }
+  if (notification.subject) {
+    const lines = [`*${escape(notification.subject)}*`];
+    if (notification.body) {
+      lines.push(escape(notification.body));
+    }
+    list.push({
+      text: mrkdwn(lines.map((line) => `>${line}`).join("\n")),
+      type: "section",
+    });
+  }
+
+  const fields = factFields(notification);
+  if (fields.length > 0) {
+    list.push({ fields, type: "section" });
+  }
+  if (notification.buildError) {
+    list.push({
+      text: mrkdwn(
+        `*Build error*\n\`\`\`${escape(notification.buildError)}\`\`\``
+      ),
+      type: "section",
+    });
+  }
+
+  const links = linkLine(notification);
+  if (links) {
+    list.push({ text: mrkdwn(links), type: "section" });
+  }
+  list.push({
+    elements: [mrkdwn(escape(notification.footer))],
+    type: "context",
+  });
+  return list;
+};
 
 /**
  * Builds a Slack attachment that keeps the status color.
@@ -41,99 +135,20 @@ const hex = (tone: Parameters<typeof toneColor>[0]): string =>
  * @returns The result.
  */
 export const slackPayload = (webhook: VercelWebhook): SlackPayload => {
-  const facts = deliveryFacts(webhook);
-  const heading = facts.mark ? `${facts.mark} ${facts.title}` : facts.title;
-  const blocks: SlackBlock[] = [
-    {
-      text: { text: clip(heading, 150), type: "plain_text" },
-      type: "header",
-    },
-  ];
-
-  if (facts.author !== "Versend") {
-    blocks.push({
-      elements: [{ text: `*${slack(facts.author)}*`, type: "mrkdwn" }],
-      type: "context",
-    });
-  }
-
-  if (facts.subject) {
-    const lines = [`*${slack(facts.subject)}*`];
-    if (facts.body) {
-      lines.push(slack(facts.body));
-    }
-    blocks.push({
-      text: {
-        text: lines.map((line) => `>${line}`).join("\n"),
-        type: "mrkdwn",
-      },
-      type: "section",
-    });
-  }
-
-  const fields: SlackText[] = [];
-  if (facts.environment) {
-    fields.push({
-      text: `*Environment*\n\`${slack(facts.environment)}\``,
-      type: "mrkdwn",
-    });
-  }
-  if (facts.branch) {
-    fields.push({
-      text: `*Branch*\n\`${slack(facts.branch)}\``,
-      type: "mrkdwn",
-    });
-  }
-  if (facts.commit) {
-    const short = slack(facts.commit.short);
-    const value = facts.commit.url
-      ? link(facts.commit.url, facts.commit.short)
-      : `\`${short}\``;
-    const author = facts.commit.author
-      ? ` · ${slack(facts.commit.author)}`
-      : "";
-    fields.push({ text: `*Commit*\n${value}${author}`, type: "mrkdwn" });
-  }
-  if (fields.length > 0) {
-    blocks.push({ fields, type: "section" });
-  }
-
-  if (facts.buildError) {
-    blocks.push({
-      text: {
-        text: `*Build error*\n\`\`\`${slack(facts.buildError)}\`\`\``,
-        type: "mrkdwn",
-      },
-      type: "section",
-    });
-  }
-
-  const links: string[] = [];
-  if (facts.openUrl) {
-    links.push(link(facts.openUrl, "Open"));
-  }
-  if (facts.inspectUrl && facts.inspectUrl !== facts.openUrl) {
-    links.push(link(facts.inspectUrl, "Inspect"));
-  }
-  if (links.length > 0) {
-    blocks.push({
-      text: { text: links.join(" · "), type: "mrkdwn" },
-      type: "section",
-    });
-  }
-
-  blocks.push({
-    elements: [{ text: slack(facts.footer), type: "mrkdwn" }],
-    type: "context",
-  });
-
+  const notification = buildNotification(webhook);
   const fallback = clip(
-    facts.subject ? `${facts.title}: ${facts.subject}` : facts.title,
-    300
+    notification.subject
+      ? `${notification.title}: ${notification.subject}`
+      : notification.title,
+    limits.fallback
   );
   return {
-    attachments: [{ blocks, color: hex(facts.tone) }],
+    attachments: [
+      { blocks: blocks(notification), color: toneColorHex(notification.tone) },
+    ],
     text:
-      facts.author === "Versend" ? fallback : `${facts.author}: ${fallback}`,
+      notification.author === defaultAuthor
+        ? fallback
+        : `${notification.author}: ${fallback}`,
   };
 };

@@ -3,9 +3,8 @@
 import { useSearchContext } from "fumadocs-ui/contexts/search";
 import { SearchIcon } from "lucide-react";
 
+import { Kbd } from "@/components/ui/kbd";
 import { cn } from "@/lib/cn";
-
-import { Kbd } from "./kbd";
 
 /**
  * Opens the Fumadocs search dialog. Styled as an input so it reads as a

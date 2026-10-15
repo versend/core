@@ -3,7 +3,7 @@
 import { useTheme } from "fumadocs-ui/provider/base";
 import { MoonIcon, SunIcon } from "lucide-react";
 
-import { IconButton } from "./icon-button";
+import { IconButton } from "@/components/ui/icon-button";
 
 /**
  * Light/dark toggle. Both icons are rendered and swapped with CSS so the
