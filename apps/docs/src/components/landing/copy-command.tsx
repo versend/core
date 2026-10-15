@@ -43,7 +43,7 @@ export const CopyCommand = ({
     <button
       aria-label={`Copy ${command}`}
       className={cn(
-        "border-fd-border bg-fd-background hover:border-fd-foreground/50 group inline-flex h-10 items-center gap-3 border px-3 text-left font-mono text-sm transition-colors",
+        "border-fd-border bg-fd-background hover:border-fd-foreground/50 group inline-flex h-10 max-w-full items-center gap-3 border px-3 text-left font-mono text-sm whitespace-nowrap transition-colors",
         className
       )}
       onClick={copy}
@@ -52,8 +52,8 @@ export const CopyCommand = ({
       <span aria-hidden className="text-fd-muted-foreground select-none">
         $
       </span>
-      <span className="text-fd-foreground">{command}</span>
-      <span className="text-fd-muted-foreground group-hover:text-fd-foreground ms-1 inline-flex size-4 items-center justify-center transition-colors">
+      <span className="text-fd-foreground min-w-0 truncate">{command}</span>
+      <span className="text-fd-muted-foreground group-hover:text-fd-foreground ms-1 inline-flex size-4 shrink-0 items-center justify-center transition-colors">
         {copied ? (
           <CheckIcon className="text-fd-success size-3.5" />
         ) : (
