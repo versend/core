@@ -21,7 +21,7 @@ export const SiteHeader = () => {
 
   return (
     <header className="border-fd-border bg-fd-background/90 sticky top-0 z-30 border-b backdrop-blur">
-      <div className="mx-auto flex h-12 w-full max-w-5xl items-center justify-between px-4">
+      <div className="mx-auto flex h-12 w-full max-w-6xl items-center justify-between px-4">
         <div className="flex items-center gap-1">
           <Brand />
           <nav
